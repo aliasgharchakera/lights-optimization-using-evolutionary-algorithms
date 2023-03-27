@@ -1,36 +1,34 @@
 \documentclass{article}
-%%%%%%% PACKAGES %%%%%%%%
-\usepackage[utf8]{inputenc}
-\usepackage[margin=3cm]{geometry}
-\usepackage{graphicx}
+\usepackage{graphicx} % Required for inserting images
 \usepackage[english]{babel}
-\usepackage{biblatex}
-\addbibresource{prop.bib}
+
+\usepackage[backend=biber]{biblatex}
+\addbibresource{references.bib}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
 
 \title{Computational Intelligence Project Proposal\\
-      \large Optimizing the Knapsack: \\
-      A Comparative Algorithm Analysis}
+      \large Optimizing Lighting in Physical \\ Spaces using Computational Intelligence}
 \author{Project Team 2}
 \date{\today}
 
 \begin{document}
 
 \maketitle
-
 \section*{Team}
 \begin{tabular}{ l l }
     Ali Asghar Yousuf & ay06993@st.habib.edu.pk \\ 
     Hafsa Khurram & hk06665@st.habib.edu.pk \\
     Syed Ibrahim Ali Haider & sh06565@st.habib.edu.pk 
-   \end{tabular}
-
+\end{tabular}
+   
 \section{Problem Statement}
 
 % Optimal lights problem
 
-Given a physical space the number of lights present is usually based off of assuming how many lights are required when there are no other external light sources. But the ground reality of electricity consumption is that most uses of lights for example in classrooms, libraries and halls etc is done during the day time where we already have a source of light \textit{the sun}. Lighting alone accounts for \(15\%\) of the average electricity bill \cite{energy.gov} and coming up with more efficient ways could be both more cost effective and overall good for the environment.
-
+Given a physical space, the number of lights present is usually based on assuming how many lights are required when there are no other external light sources. But the ground reality of electricity consumption is that most uses of lights for example in classrooms, libraries, and halls, etc are done during the daytime when we already have a source of light \textit{the sun}. Lighting alone accounts for \(15\%\) of the average electricity bill \cite{energy.gov} and coming up with more efficient ways could be both more cost-effective and overall good for the environment.
+\\
 In this project, we want to solve this problem by using CI techniques to find out the optimal number of lights turned on i.e the least amounts of lights and the maximum area lit given a physical space with walls, the number of lights, and their positions, number of windows, their positions and permeability and the time. 
+
 \section{Approach}
 
 We plan to use Computational Intelligence (CI) techniques to optimize the number of artificial light sources in a room. Specifically, we plan to use evolutionary algorithms, which are a type of CI technique that simulates the process of natural selection to find the best solution to an optimization problem.
@@ -43,15 +41,14 @@ This iterative process will continues until a stopping criterion is met. The bes
 
 By using CI techniques, we can efficiently explore a large search space and find a solution that meets our specific needs and constraints.
 
+
 \section{Data sets we want to use}
 
-For the purpose of this project we will use a generalised data set for the sunlight that strikes the earth at any given hour using a data set developed by \cite{perez_ineichen_seals_michalsky_stewart_1990} this data set will be used to calculate the sunlight pouring out of the window. This data set will be used as a standard initially although it is for the united states only. 
+For the purpose of this project we will use a generalized data set for the sunlight that strikes the earth at any given hour using a data set developed by \cite{perez_ineichen_seals_michalsky_stewart_1990} this data set will be used to calculate the sunlight pouring out of the window. This data set will be used as a standard initially although it is for the united states only. 
 
 Another data set that we will be using is the data set for the physical space this data set will contain the following 
 
-\begin{enumerate}
-    \item The number of lights 
-    \item The position of these lights 
+\begin{enumerate} 
     \item The number of walls/ doors 
     \item the dimensions and positions of them 
     \item The number of windows 
@@ -60,12 +57,11 @@ Another data set that we will be using is the data set for the physical space th
 
 \section{Relevant work}
 
-Given the environmental crisis and the growing power concerns there has been significant work highlighting the importance of integrating natural lights into our calculations for artificial lights. We found that people overall prefered sun lit spaces not only in real life but also in virtual reality where sunlight is being incorporated. \cite{hegazy_ichiriyama_yasufuku_abe_2021} \cite{galasiu_veitch_2006}
+Given the environmental crisis and the growing power concerns, there has been significant work highlighting the importance of integrating natural lights into our calculations for artificial lights. We found that people overall preferred sunlit spaces not only in real life but also in virtual reality where sunlight is being incorporated. \cite{hegazy_ichiriyama_yasufuku_abe_2021} \cite{galasiu_veitch_2006}
 
-There has also been some work done in the exploration of what CI approaches may be used to solve this problem including an exploration into fuzzy algorithms while we are not using any of these approaches the considerations taken are helpful when concluding ones own evolutionary algorithm. \cite{kurian_aithal_bhat_george_2008}
+There has also been some work done in the exploration of what CI approaches may be used to solve this problem including an exploration into fuzzy algorithms while we are not using any of these approaches the considerations taken are helpful when concluding one's own evolutionary algorithm. \cite{kurian_aithal_bhat_george_2008}
 
-We have also seen sufficient work in the area of calculating the light emmited by sunlight using the given parameters which will be used to calculate our \textit{fitness}. 
+We have also seen sufficient work in the area of calculating the light emitted by sunlight using the given parameters which will be used to calculate our \textit{fitness}. \cite{solar}
 
 \printbibliography
-
 \end{document}
