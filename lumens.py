@@ -17,6 +17,8 @@ def lumens(beam_angle, luminous_intensity, distance):
     # calculate lumens
     lumens = luminous_intensity * steradians
 
+    # accomodate for the fact that the light is not uniform using neighbourhood
+
     return lumens, surface_area_taking_light
 
 print(lumens(10, 1000, 5))
