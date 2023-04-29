@@ -17,7 +17,7 @@ class Tile:
     
     def light_down(self):
         self.lit = False
-    # def draw(self):
+    # def draw(self): 
     #     pygame.draw.rect(screen, self.color, self.rect)
 
     
