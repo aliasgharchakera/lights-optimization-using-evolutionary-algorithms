@@ -16,7 +16,7 @@ class Room:
         for i in range(X):
             temp = []
             for j in range(Y):
-                temp.append(tiles.Tile(i, j, 0, 0))
+                temp.append(tiles.Tile(i, j, None, 0))
                 # self.tiles.append(tiles.Tile(i, j, 0, 0))
             self.tiles.append(temp)
         self.lights = []
@@ -28,6 +28,11 @@ class Room:
 
     def create_tiles(self, x, y, obstacle, height):
         self.tiles.append(tiles.Tile(x, y, obstacle, height))
+
+    def add_obstacle(self, x, y, obstacle):
+        '''obstacle is 0 for north wall, 1 for east wall, 2 for south wall, 3 for west wall
+        height is 0 for flat and >0 for raised'''
+        self.tiles[x][y].create_obstacle(obstacle, 0)
 
     def num_lit_tiles(self):
         # returns the number of tiles that are lit
