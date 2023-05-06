@@ -123,5 +123,5 @@ class Light(Problem):
 
 light = Light()
 print(light.chromosome(5,5))
-r=Room(20,20,20,[(0,2,3)])
+r=Room(20,20,20,[(0,2,2,0)])
 light.fitness_function(r,light.chromosome(5,5))
