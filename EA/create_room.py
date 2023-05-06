@@ -1,5 +1,5 @@
-import tiles
-import lights
+import tiles as tiles
+import lights as lights
 import math
 
 X = 10 # boxes it will be divided in
@@ -12,7 +12,7 @@ MINIMUM_FILL = 0.6
 
 class Room:
 
-    def __init__(self, width, height, length):
+    def __init__(self, width, height, length, obstacles):
         self.width = width
         self.height = height
         self.length = length
@@ -29,8 +29,10 @@ class Room:
             for j in range(Y):
                 temp.append(lights.Lights(i, j, STANDARD_INTENSITY, self.height, STANDARD_BEAM_ANGLE))
             self.lights.append(temp)
-        print(self.lights)
-        print(self.tiles)
+        for c in obstacles:
+            self.add_obstacle(c[0], c[1], c[2])
+        # print(self.lights)
+        # print(self.tiles)
 
     def add_obstacle(self, x, y, obstacle):
         '''obstacle is 0 for north wall, 1 for east wall, 2 for south wall, 3 for west wall
@@ -201,6 +203,6 @@ class Room:
     
 
         
-room = Room(100, 100, 10)
-print(room.tiles)
+# room = Room(100, 100, 10)
+# print(room.tiles)
         

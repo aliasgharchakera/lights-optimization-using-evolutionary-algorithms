@@ -1,7 +1,11 @@
 import matplotlib.pyplot as plt
 import pandas as pd
-from Evolution.evolution import Evolution
-from Evolution.problem import Problem
+# from Evolution.evolution import Evolution
+# from Evolution.problem import Problem
+from Problem import Problem
+from Genetic_Algorithm import GA
+from Light import Light
+from create_room import Room
 
 
 class Optimization:
@@ -35,18 +39,19 @@ class Optimization:
 
         self.mutation_rate = mutation_rate
         self.selection_case = selection_case
+        # self.room = Room()
 
-    def evolve(self) -> Evolution:
+    def evolve(self) -> GA:
         """Returns an Evolution object
 
         Returns:
             Evolution: Evolution object
         """
-        return Evolution(problem=self.problem,
+        return GA(problem=self.problem,
                          mutation_rate=self.mutation_rate,
                          population_size=self.population_size,
-                         selection_method1=self.selection_case[0],
-                         selection_method2=self.selection_case[1],
+                         parent_selection=self.selection_case[0],
+                         survivor_selection=self.selection_case[1],
                          number_of_generations=self.number_of_generations,
                          number_of_offsprings=self.number_of_offsprings)
 
@@ -95,8 +100,8 @@ class Optimization:
             fitness_lst = [(1 / fitness) if fitness != 0 else 100
                            for fitness in fitness_lst]
 
-        print("Initial fitness: ", fitness_lst[0])
-        print("Final fitness: ", fitness_lst[-1])
+        # print("Initial fitness: ", fitness_lst[0])
+        # print("Final fitness: ", fitness_lst[-1])
 
         x = list(range(len(fitness_lst)))
         y = fitness_lst
@@ -144,3 +149,6 @@ class Optimization:
         plt.plot(df["Average"])
         plt.savefig("Analysis/" + filename + ".png")
         plt.close()
+
+opt = Optimization(problem=Light, population_size=30, number_of_offsprings=10, number_of_generations=100, mutation_rate=0.50, number_of_iterations=10, selection_case=(0, 0))
+opt.evolve()

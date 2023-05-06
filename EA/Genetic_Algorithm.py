@@ -1,8 +1,15 @@
 import random
 
 # Importing our abstract Problem class and our selection scheme class
-from EA.Problem import Problem
-from EA.Selection_schemes import SelectionSchemes
+from Problem import Problem
+from Selection_schemes import SelectionSchemes
+from Light import Light
+from create_room import Room
+X = 10
+Y = 10
+H = 10
+OBSTACLES = [(x, y) for x in range(10) for y in range(10) if random.random() < 0.2]
+print(OBSTACLES)
 
 # Main Genetic Algorithm Class
 class GA:
@@ -23,7 +30,9 @@ class GA:
             population_size=population_size,
             fitness_function=problem.fitness_function
             )
-
+        self.room = Room(X, Y, H, OBSTACLES)
+        self.x, self.y = X, Y
+        self.obstacles = OBSTACLES
         # Initialsing our GA components from specified problem class that will be passed
         self.chromosome = problem.chromosome
         self.fitness_function = problem.fitness_function
@@ -53,7 +62,7 @@ class GA:
         Returns:
             list: List of chromosomes of length population_size
         """
-        return [self.chromosome() for _ in range(self.population_size)]
+        return [self.chromosome(self.x, self.y, self.obstacles) for _ in range(self.population_size)]
 
     # Define the get_best_individual function to find the fittest chromosome from the population
     def get_best_individual(self, population: list):
@@ -229,7 +238,7 @@ class GA:
         """
         # Get the initial population
         population = self.initial_population()
-        
+        print(population)
         # Create a list to store the best fitness value for each generation
         fitness_lst = []
         

@@ -1,5 +1,5 @@
 import random
-from EA.Problem import Problem
+from Problem import Problem
 
 
 from create_room import Room
@@ -108,3 +108,4 @@ class Light(Problem):
         # return mutated choromose
         return individual
 
+light = Light()
