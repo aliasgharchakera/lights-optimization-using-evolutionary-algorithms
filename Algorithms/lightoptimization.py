@@ -6,7 +6,7 @@ parentdir = os.path.dirname(currentdir)
 sys.path.append(parentdir)
 
 import random
-from EA.tiles import Tile
+from tiles import Tile
 from Evolution.problem import Problem
 from Evolution.selection_schemes import SelectionSchemes
 # from Travelling_Salesman.data import matrix as graph
