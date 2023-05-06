@@ -16,8 +16,10 @@ class SelectionSchemes:
             population. fitness_function is the fitness function to calculate
             fitness.
         """
-        self.population_size = population_size
+
         self.fitness_function = fitness_function
+        self.population_size = population_size
+
 
     def truncation(self, population: list, T: float = 0.4) -> list:
         """Truncates the population according to the truncation value
@@ -38,6 +40,7 @@ class SelectionSchemes:
             (fittest) and select random chromosomes from that 60% and make a
             new population.
         """
+
         N = len(population)
         sorted_population = sorted(population, key=self.fitness_function)
         new_population = list(
@@ -60,6 +63,7 @@ class SelectionSchemes:
             Such that the probability of a chromosome being selected is
             (fitness of chromosone) / (sum of all fitnesses).
         """
+
         fitness_lst = list(map(self.fitness_function, population))
         total_fitness = sum(fitness_lst)
         probabilities = list(map(lambda x: x / total_fitness, fitness_lst))
@@ -79,6 +83,7 @@ class SelectionSchemes:
             select the chromosome with the highest fitness and add that 
             chromosone to the new population.
         """
+
         new_population = []
         for _ in range(self.population_size):
             tournament = random.sample(population, 2)
@@ -102,6 +107,7 @@ class SelectionSchemes:
             invidual will have the highest rank which will be N. The least fit
             will have the lowest rank which will be 1.
         """
+
         N = len(population)
         sorted_population = sorted(population, key=self.fitness_function)
         probabilities = list(map(lambda x: x / N, range(1, N + 1)))
@@ -118,4 +124,5 @@ class SelectionSchemes:
         Returns:
             list: new population of chromosomes after selection
         """
+        
         return random.choices(population, k=self.population_size)
