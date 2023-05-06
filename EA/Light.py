@@ -12,23 +12,31 @@ class Light(Problem):
 
     # CREATE CHROMSONE REPRESENTATION !
     @staticmethod
-    def chromosome() -> list:
+    def chromosome(width, height) -> list:
         """
         Returns:
             list: Returns a chromosome representing a possible solution of lights (grid) in the population
         """
+        # Set the minimum and maximum number of lights allowed
+        min_lights = 1
+        max_lights = width * height 
 
-        # Initialize a Room object with the desired dimensions
-        room = Room()
+        # Generate a random number of lights for this chromosome
+        num_lights = random.randint(min_lights, max_lights)
 
-        # Extract the relevant information from the Room object to create a chromosome
-        chromosome = []
+        # Randomly generate the (x, y) positions for each light
+        chromosone = []
+        for i in range(num_lights):
+            x = random.randint(0, width-1)
+            y = random.randint(0, height-1)
+            chromosone.append((x, y))
 
-
+        # Return the list of light positions (chromosome)
+        return chromosone
 
     # CREATE FITNESS FUNCTION 
     @staticmethod
-    def fitness_function(route: list) -> float:
+    def fitness_function(light_positions: list) -> float:
         """Calculates the -----
 
         Args:
