@@ -40,13 +40,13 @@ class Lights:
     def give_light_distance(self):
         return self.distance
     
-    def give_light_functions(self, room_width,X_, room_length,Y_):
+    def give_light_functions(self, room_width,X_, room_length,Y_,x,y):
         if self.lit:
             # this will give us the distance to the middle of the light from the left wall
             distance_on_width = ((room_width/X_) * self.x) + (room_width/(2*X_))
             distance_on_length = ((room_length/Y_) * self.y) + (room_length/(2*Y_))
             radius = (math.tan(math.radians(self.beam_angle)) * self.distance)
-            return (distance_on_width, distance_on_length, radius)
+            return (distance_on_width, distance_on_length, radius, self.give_light_intensity(),x,y)
         else:
             return None
 

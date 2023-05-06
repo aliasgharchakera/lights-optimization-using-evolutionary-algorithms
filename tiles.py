@@ -11,9 +11,16 @@ class Tile:
         # obstacle is 0 for north wall, 1 for east wall, 2 for south wall, 3 for west wall
         # height is 0 for flat and >0 for raised
         self.lit = False
+        self.fill_vessel = [0]*8
+         # list of 8 zeros, one for each direction
+        # for direction see the diagram on group
 
     def light_up(self):
         self.lit = True
+
+    def fill(self, direction, percentage):
+        if self.fill_vessel[direction] < percentage:
+            self.fill_vessel[direction] = percentage
     
     def light_down(self):
         self.lit = False
