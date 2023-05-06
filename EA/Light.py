@@ -8,23 +8,23 @@ class Light(Problem):
     # CREATE CHROMSONE REPRESENTATION !
     @staticmethod
     def chromosome() -> list:
-        """Returns a random route of cities
+        """Returns a ----
 
         Returns:
-            list: A random route of cities
+            list: A -----
         """
         return 
 
     # CREATE FITNESS FUNCTION 
     @staticmethod
     def fitness_function(route: list) -> float:
-        """Calculates the distance covered in the route
+        """Calculates the -----
 
         Args:
-            route (list): different routes of cities
+            route (list): ----
 
         Returns:
-            float: distance covered in the route
+            float: ----
         """
   
         return 
