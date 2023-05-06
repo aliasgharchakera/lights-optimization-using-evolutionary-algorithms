@@ -25,5 +25,10 @@ class Tile:
         '''obstacle is 0 for north wall, 1 for east wall, 2 for south wall, 3 for west wall
         height is 0 for flat and >0 for raised'''
 
+    def give_status(self):
+        return self.lit
+    
+
+
 
     
