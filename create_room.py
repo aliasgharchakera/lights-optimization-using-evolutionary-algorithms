@@ -27,6 +27,8 @@ class Room:
             for j in range(Y):
                 temp.append(lights.Lights(i, j, STANDARD_INTENSITY, self.height, STANDARD_BEAM_ANGLE))
             self.lights.append(temp)
+        print(self.lights)
+        print(self.tiles)
 
     def add_obstacle(self, x, y, obstacle):
         '''obstacle is 0 for north wall, 1 for east wall, 2 for south wall, 3 for west wall
@@ -34,15 +36,18 @@ class Room:
         self.tiles[x][y].create_obstacle(obstacle, 0)
 
     def light_light(self, x, y):
+        '''lights up the light at (x,y)'''
         self.lights[x][y].light()
 
     def reset_lights(self):
+        '''turns off all the lights'''
         for i in range(X):
             for j in range(Y):
                 self.lights[i][j].unlight()
         
     
     def get_light_functions(self):
+        '''returns a list of tuples of the form (distance_on_width, distance_on_length, radius)'''
         light_functions = []
         for i in range(X):
             for j in range(Y):
@@ -52,12 +57,13 @@ class Room:
         return light_functions
     
     def reset_tiles(self):
+        '''lights down all the tiles'''
         for i in range(X):
             for j in range(Y):
                 self.tiles[i][j].light_down()
     
     def light_tiles(self):
-        # lights up all the tiles that are lit
+        '''lights up all the tiles that are lit'''
         light_functions = self.get_light_functions()
 
         for i in range(len(light_functions)):
@@ -72,12 +78,12 @@ class Room:
                 
         pass
     def num_lit_tiles(self):
-        # returns the number of tiles that are lit
+        '''returns the number of tiles that are lit'''
         pass
 
     
 
         
-
-
+room = Room(100, 100, 10)
+print(room.tiles)
         
