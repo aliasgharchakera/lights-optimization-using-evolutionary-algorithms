@@ -19,5 +19,6 @@ class Tile:
         self.lit = False
     # def draw(self): 
     #     pygame.draw.rect(screen, self.color, self.rect)
+    
 
     

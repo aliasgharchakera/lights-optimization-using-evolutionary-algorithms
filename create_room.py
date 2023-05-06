@@ -1,6 +1,8 @@
 import tiles
 import lights
 
+X = 10 # boxes it will be divided in
+Y = 10
 STANDARD_INTENSITY = 100
 STANDARD_BEAM_ANGLE = 45
 
@@ -11,14 +13,18 @@ class Room:
         self.height = height
         self.length = length
         self.tiles = []
-        for i in range(self.width):
-            for j in range(self.length):
-                self.tiles.append(tiles.Tile(i, j, 0, 0))
+        for i in range(X):
+            temp = []
+            for j in range(Y):
+                temp.append(tiles.Tile(i, j, 0, 0))
+                # self.tiles.append(tiles.Tile(i, j, 0, 0))
+            self.tiles.append(temp)
         self.lights = []
-        for i in range(self.width):
-            for j in range(self.length):
-                # create nested lists for these 
-                self.lights.append(lights.Lights(i, j, STANDARD_INTENSITY, self.height))
+        for i in range(X):
+            temp = []
+            for j in range(Y):
+                temp.append(lights.Lights(i, j, STANDARD_INTENSITY, self.height, STANDARD_BEAM_ANGLE))
+            self.lights.append(temp)
 
     def create_tiles(self, x, y, obstacle, height):
         self.tiles.append(tiles.Tile(x, y, obstacle, height))
