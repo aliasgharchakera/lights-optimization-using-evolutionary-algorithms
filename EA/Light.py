@@ -15,29 +15,15 @@ class Light(Problem):
     def chromosome() -> list:
         """
         Returns:
-            list: Returns a chromosome representing an individual in the population
+            list: Returns a chromosome representing a possible solution of lights (grid) in the population
         """
 
         # Initialize a Room object with the desired dimensions
         room = Room()
-        
-        # Set up the lights and obstacles in the room as desired
-        
+
         # Extract the relevant information from the Room object to create a chromosome
         chromosome = []
-        
-        for i in range(Room.X):
-            for j in range(Room.Y):
-                tile = room.tiles[i][j]
-                light = room.lights[i][j]
-                if tile.obstacle is not None:
-                    chromosome.append(0)  # Indicates the tile has an obstacle
-                elif light.status:
-                    chromosome.append(1)  # Indicates the tile is lit
-                else:
-                    chromosome.append(2)  # Indicates the tile is not lit
-                
-        return chromosome
+
 
 
     # CREATE FITNESS FUNCTION 
