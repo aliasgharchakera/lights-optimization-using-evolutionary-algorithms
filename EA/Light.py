@@ -1,23 +1,49 @@
 import random
 from EA.Problem import Problem
 
+
+from create_room import Room
+from lights import Lights
+from tiles import Tile
+
 class Light(Problem):
 
     # inverse_fitness = True # variable used if we are to generate grpahs S
 
     # CREATE CHROMSONE REPRESENTATION !
     @staticmethod
-    def chromosome() -> list:
-        """Returns a ----
-
-        Returns:
-            list: A -----
+    def chromosome(width, height, obstacles) -> list:
         """
-        return 
+        Returns:
+            list: Returns a chromosome representing a possible solution of lights (grid) in the population
+        """
+        # Set the minimum and maximum number of lights allowed
+        min_lights = 1
+        max_lights = width * height 
+
+        # Generate a random number of lights for this chromosome
+        num_lights = random.randint(min_lights, max_lights)
+
+        # Randomly generate the (x, y) positions for each light
+        chromosone = []
+        for i in range(num_lights):
+            while True:
+                # Generate a random position for the light
+                x = random.randint(0, width-1)
+                y = random.randint(0, height-1)
+                
+                # Check if the position is occupied by an obstacle
+                if (x, y) not in obstacles:
+                    break
+                    
+            chromosone.append((x, y))
+
+        # Return the list of light positions (chromosome)
+        return chromosone
 
     # CREATE FITNESS FUNCTION 
     @staticmethod
-    def fitness_function(route: list) -> float:
+    def fitness_function(light_positions: list) -> float:
         """Calculates the -----
 
         Args:
