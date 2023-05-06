@@ -102,13 +102,13 @@ class Light(Problem):
     # MUTATE COMPLETE 
     @staticmethod
     def mutate(individual: list) -> list:
-        """Mutates the --- by swapping two -----
+        """Mutates the positioning of lights by swapping two lists of light positions
 
         Args:
-            individual (list): list of -----
+            individual (list): list of possible light locations
 
         Returns:
-            list: list of ---- after mutation
+            list: list of possible light locations after mutation
         """
 
         # select two random indexes to swap in the individual chromosome
@@ -124,4 +124,4 @@ class Light(Problem):
 light = Light()
 print(light.chromosome(5,5))
 r=Room(20,20,20,[(0,2,2,0)])
-light.fitness_function(r,light.chromosome(5,5))
+print(light.fitness_function(r,light.chromosome(5,5)))
