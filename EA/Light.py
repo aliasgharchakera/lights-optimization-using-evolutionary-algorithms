@@ -102,7 +102,7 @@ class Light(Problem):
     # MUTATE COMPLETE 
     @staticmethod
     def mutate(individual: list) -> list:
-        """Mutates the positioning of lights by swapping two lists of light positions
+        """Mutates the positioning of lights by swapping two postions from the list of postions of lightts
 
         Args:
             individual (list): list of possible light locations
