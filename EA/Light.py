@@ -1,7 +1,12 @@
 import random
 
+import os
 import sys
-sys.path.append("C:/Users/ibii/Documents/GitHub/CI-Spring23-Project/")
+
+# add the parent directory of the current directory to the Python path
+current_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.dirname(current_dir)
+sys.path.append(parent_dir)
 
 from EA.Problem import Problem
 from Lumen.create_room import Room
