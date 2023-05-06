@@ -1,5 +1,5 @@
-import tiles as tiles
-import lights as lights
+import Lumen.tiles as tiles
+import Lumen.lights as lights
 import math
 
 X = 10 # boxes it will be divided in

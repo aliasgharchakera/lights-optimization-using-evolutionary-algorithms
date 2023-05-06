@@ -1,5 +1,10 @@
 import random
-from Problem import Problem
+
+import sys
+sys.path.append("C:/Users/ibii/Documents/GitHub/CI-Spring23-Project/")
+
+from EA.Problem import Problem
+from Lumen.create_room import Room
 
 class Light(Problem):
 
@@ -14,7 +19,7 @@ class Light(Problem):
         """
         # Set the minimum and maximum number of lights allowed
         min_lights = 1
-        max_lights = width * height 
+        max_lights = width * height // (height) # see if this is to be changed 
 
         # Generate a random number of lights for this chromosome
         num_lights = random.randint(min_lights, max_lights)
@@ -33,7 +38,7 @@ class Light(Problem):
 
     # CREATE FITNESS FUNCTION 
     @staticmethod
-    def fitness_function(light_positions: list) -> float:
+    def fitness_function(Room,light_positions: list) -> float:
         """Calculates the -----
 
         Args:
@@ -49,17 +54,17 @@ class Light(Problem):
             Room.light_light(x, y)
         
         # run, does all claulations
-        light_tiles
+        Room.light_tiles()
 
         # return the actual lit tiles, based on al calulation
-            def num_lit_tiles(self):
+        Number_lit_tiles = Room.num_lit_tiles()
             
         # divide by chromosone length 
-        # 
-        give us fitness
+        fitness = Number_lit_tiles/length_chromosone
 
         # reset function for room    
-
+        Room.reset_lights
+        Room.reset_tiles
   
         return 
 
@@ -97,7 +102,7 @@ class Light(Problem):
     # MUTATE COMPLETE 
     @staticmethod
     def mutate(individual: list) -> list:
-        """Mutates the ----- by swapping two -----
+        """Mutates the --- by swapping two -----
 
         Args:
             individual (list): list of -----
@@ -117,3 +122,6 @@ class Light(Problem):
         return individual
 
 light = Light()
+print(light.chromosome(5,5))
+r=Room(20,20,20,[(0,2,3)])
+light.fitness_function(r,light.chromosome(5,5))

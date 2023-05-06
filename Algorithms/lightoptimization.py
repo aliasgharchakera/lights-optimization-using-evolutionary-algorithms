@@ -6,11 +6,9 @@ parentdir = os.path.dirname(currentdir)
 sys.path.append(parentdir)
 
 import random
-from tiles import Tile
+from Lumen.tiles import Tile
 from Evolution.problem import Problem
 from Evolution.selection_schemes import SelectionSchemes
-# from Travelling_Salesman.data import matrix as graph
-# from Travelling_Salesman.data import num_nodes as num_cities
 
 class Chromosome:
     def __init__(self, x: int, y: int) -> None:

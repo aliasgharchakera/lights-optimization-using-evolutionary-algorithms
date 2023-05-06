@@ -32,29 +32,29 @@ num_iterations = [10] * TOTAL_CASES
 num_gens = [10000] * TOTAL_CASES
 mutation_rates = [0.5] * TOTAL_CASES
 
-optimization_TSP_BSF = list_of_problems(problem,
-                                        pop_sizes=pop_sizes,
-                                        num_offsprings=num_offsprings,
-                                        num_iterations=num_iterations,
-                                        num_gens=num_gens,
-                                        mutation_rates=mutation_rates)
+# optimization_TSP_BSF = list_of_problems(problem,
+#                                         pop_sizes=pop_sizes,
+#                                         num_offsprings=num_offsprings,
+#                                         num_iterations=num_iterations,
+#                                         num_gens=num_gens,
+#                                         mutation_rates=mutation_rates)
 
-pop_sizes = [70] * TOTAL_CASES
-num_offsprings = [30] * TOTAL_CASES
-num_iterations = [20] * TOTAL_CASES
-num_gens = [1000] * TOTAL_CASES
+# pop_sizes = [70] * TOTAL_CASES
+# num_offsprings = [30] * TOTAL_CASES
+# num_iterations = [20] * TOTAL_CASES
+# num_gens = [1000] * TOTAL_CASES
 
-optimization_TSP_ASF = list_of_problems(problem,
-                                        pop_sizes=pop_sizes,
-                                        num_offsprings=num_offsprings,
-                                        num_iterations=num_iterations,
-                                        num_gens=num_gens,
-                                        mutation_rates=mutation_rates)
+# optimization_TSP_ASF = list_of_problems(problem,
+#                                         pop_sizes=pop_sizes,
+#                                         num_offsprings=num_offsprings,
+#                                         num_iterations=num_iterations,
+#                                         num_gens=num_gens,
+#                                         mutation_rates=mutation_rates)
 
-for i in range(TOTAL_CASES):
-    op: Optimization = optimization_TSP_BSF[i]
-    op.plot_BSF()
+# for i in range(TOTAL_CASES):
+#     op: Optimization = optimization_TSP_BSF[i]
+#     op.plot_BSF()
 
-for i in range(TOTAL_CASES):
-    op_a: Optimization = optimization_TSP_ASF[i]
-    op_a.plot_ASF()
+# for i in range(TOTAL_CASES):
+#     op_a: Optimization = optimization_TSP_ASF[i]
+#     op_a.plot_ASF()

@@ -1,6 +1,8 @@
 import matplotlib.pyplot as plt
 import pandas as pd
 
+import sys
+sys.path.append("C:/Users/ibii/Documents/GitHub/CI-Spring23-Project/")
 
 from EA.Problem import Problem
 from EA.Genetic_Algorithm import GA
