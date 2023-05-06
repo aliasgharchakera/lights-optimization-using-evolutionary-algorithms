@@ -12,6 +12,7 @@ MINIMUM_FILL = 0.6
 
 class Room:
 
+    # externally called functions
     def __init__(self, width, height, length, obstacles):
         self.width = width
         self.height = height
@@ -34,75 +35,25 @@ class Room:
         # print(self.lights)
         # print(self.tiles)
 
-    def add_obstacle(self, x, y, obstacle, height):
-        '''obstacle is 0 for north wall, 1 for east wall, 2 for south wall, 3 for west wall
-        height is 0 for flat and >0 for raised'''
-        self.tiles[x][y].create_obstacle(obstacle, height)
-
-    def light_light(self, x, y):
-        '''lights up the light at (x,y)'''
-        self.lights[x][y].light()
-
-    def reset_lights(self):
-        '''turns off all the lights'''
+    def num_lit_tiles(self):
+        # returns the number of tiles that are lit
+        count = 0
         for i in range(X):
             for j in range(Y):
-                self.lights[i][j].unlight()
-        
-    
-    def get_light_functions(self):
-        '''returns a list of tuples of the form (distance_on_width, distance_on_length, radius)'''
-        light_functions = []
-        for i in range(X):
-            for j in range(Y):
-                if self.lights[i][j].give_status():
-                    light_functions.append(self.lights[i][j].give_light_functions(self.width,X, self.length,Y,i,j))
-        # distance_on_width, distance_on_length, radius
-        return light_functions
-    
-    def reset_tiles(self):
-        '''lights down all the tiles'''
-        for i in range(X):
-            for j in range(Y):
-                self.tiles[i][j].light_down()
-                self.tiles[i][j].fill_vessel = [0]*8
+                if self.tiles[i][j].give_status():
+                    count+=1
+                else:
+                    temp = 0
+                    for k in range(8):
+                        temp +=self.tiles[i][j].fill_vessel[k]
+                    if temp >= MINIMUM_FILL:
+                        count+=1
+        return count
 
-    def shadow_region(self, x_tile, y_tile,x_light, y_light, radius):
-        # returns dimensions of the shadow region
-        shadow_length = 0
-        direction = self.tiles[x_tile][y_tile].obstacle
-        if (direction == 0 or direction == 2) and y_light<=y_tile and x_light == x_tile:
-            # north wall the light is above the tile
-            base = self.height - self.tiles[x_tile][y_tile].height
-            perpendicular = (y_tile-y_light)*(self.length/Y)
-            angle = math.tan(perpendicular/base)
-            base2 = self.height * math.tan(angle)
-            shadow_length = base2 - (x_light*(self.width/X))
-        if (direction == 0 or direction ==2) and y_light>=y_tile and x_light == x_tile:
-            # north wall the light is below the tile
-            base = self.height - self.tiles[x_tile][y_tile].height
-            perpendicular = (y_light-y_tile)*(self.length/Y)
-            angle = math.tan(perpendicular/base)
-            base2 = self.height * math.tan(angle)
-            shadow_length = base2 - ((X-x_light)*(self.width/X))
-        if (direction == 1 or direction==3) and x_light>=x_tile and y_light == y_tile:
-            # east wall the light is right of the tile
-            base = self.height - self.tiles[x_tile][y_tile].height
-            perpendicular = (x_light-x_tile)*(self.width/X)
-            angle = math.tan(perpendicular/base)
-            base2 = self.height * math.tan(angle)
-            shadow_length = base2 - ((Y-y_light)*(self.length/Y))
-        if (direction == 1 or direction == 3) and x_light<=x_tile and y_light == y_tile:
-            # east wall the light is left of the tile
-            base = self.height - self.tiles[x_tile][y_tile].height
-            perpendicular = (x_tile-x_light)*(self.width/X)
-            angle = math.tan(perpendicular/base)
-            base2 = self.height * math.tan(angle)
-            shadow_length = base2 - (y_light*(self.length/Y))
-
-        return shadow_length
-
-            
+    def reset(self):
+        '''resets the room'''
+        self.reset_lights()
+        self.reset_tiles()
     
     def light_tiles(self):
         '''lights up all the tiles that are lit'''
@@ -184,20 +135,75 @@ class Room:
                                 self.tiles[k][j].fill(fill,8)
          
         pass
-    def num_lit_tiles(self):
-        # returns the number of tiles that are lit
-        count = 0
+    # internal functions
+    def add_obstacle(self, x, y, obstacle, height):
+        '''obstacle is 0 for north wall, 1 for east wall, 2 for south wall, 3 for west wall
+        height is 0 for flat and >0 for raised'''
+        self.tiles[x][y].create_obstacle(obstacle, height)
+
+    def light_light(self, x, y):
+        '''lights up the light at (x,y)'''
+        self.lights[x][y].light()
+
+    def reset_lights(self):
+        '''turns off all the lights'''
         for i in range(X):
             for j in range(Y):
-                if self.tiles[i][j].give_status():
-                    count+=1
-                else:
-                    temp = 0
-                    for k in range(8):
-                        temp +=self.tiles[i][j].fill_vessel[k]
-                    if temp >= MINIMUM_FILL:
-                        count+=1
-        return count
+                self.lights[i][j].unlight()
+        
+    
+    def get_light_functions(self):
+        '''returns a list of tuples of the form (distance_on_width, distance_on_length, radius)'''
+        light_functions = []
+        for i in range(X):
+            for j in range(Y):
+                if self.lights[i][j].give_status():
+                    light_functions.append(self.lights[i][j].give_light_functions(self.width,X, self.length,Y,i,j))
+        # distance_on_width, distance_on_length, radius
+        return light_functions
+    
+    def reset_tiles(self):
+        '''lights down all the tiles'''
+        for i in range(X):
+            for j in range(Y):
+                self.tiles[i][j].light_down()
+                self.tiles[i][j].fill_vessel = [0]*8
+
+    def shadow_region(self, x_tile, y_tile,x_light, y_light, radius):
+        # returns dimensions of the shadow region
+        shadow_length = 0
+        direction = self.tiles[x_tile][y_tile].obstacle
+        if (direction == 0 or direction == 2) and y_light<=y_tile and x_light == x_tile:
+            # north wall the light is above the tile
+            base = self.height - self.tiles[x_tile][y_tile].height
+            perpendicular = (y_tile-y_light)*(self.length/Y)
+            angle = math.tan(perpendicular/base)
+            base2 = self.height * math.tan(angle)
+            shadow_length = base2 - (x_light*(self.width/X))
+        if (direction == 0 or direction ==2) and y_light>=y_tile and x_light == x_tile:
+            # north wall the light is below the tile
+            base = self.height - self.tiles[x_tile][y_tile].height
+            perpendicular = (y_light-y_tile)*(self.length/Y)
+            angle = math.tan(perpendicular/base)
+            base2 = self.height * math.tan(angle)
+            shadow_length = base2 - ((X-x_light)*(self.width/X))
+        if (direction == 1 or direction==3) and x_light>=x_tile and y_light == y_tile:
+            # east wall the light is right of the tile
+            base = self.height - self.tiles[x_tile][y_tile].height
+            perpendicular = (x_light-x_tile)*(self.width/X)
+            angle = math.tan(perpendicular/base)
+            base2 = self.height * math.tan(angle)
+            shadow_length = base2 - ((Y-y_light)*(self.length/Y))
+        if (direction == 1 or direction == 3) and x_light<=x_tile and y_light == y_tile:
+            # east wall the light is left of the tile
+            base = self.height - self.tiles[x_tile][y_tile].height
+            perpendicular = (x_tile-x_light)*(self.width/X)
+            angle = math.tan(perpendicular/base)
+            base2 = self.height * math.tan(angle)
+            shadow_length = base2 - (y_light*(self.length/Y))
+
+        return shadow_length
+    
              
 
     
