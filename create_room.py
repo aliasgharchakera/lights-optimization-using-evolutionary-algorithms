@@ -34,6 +34,25 @@ class Room:
         height is 0 for flat and >0 for raised'''
         self.tiles[x][y].create_obstacle(obstacle, 0)
 
+    def light_light(self, x, y):
+        self.lights[x][y].light()
+
+    def reset_lights(self):
+        for i in range(X):
+            for j in range(Y):
+                self.lights[i][j].unlight()
+        
+    
+    def get_light_functions(self):
+        light_functions = []
+        for i in range(X):
+            for j in range(Y):
+                if self.lights[i][j].give_status():
+                    light_functions.append(self.lights[i][j].give_light_functions(self.width,X, self.length,Y))
+        # distance_on_width, distance_on_length, radius
+        return light_functions
+    
+    
     def num_lit_tiles(self):
         # returns the number of tiles that are lit
         pass
