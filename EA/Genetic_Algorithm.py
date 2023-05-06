@@ -7,10 +7,6 @@ from EA.Light import Light
 from Lumen.create_room import Room
 
 
-X,Y,H=10,10,10
-OBSTACLES = [(x, y) for x in range(10) for y in range(10) if random.random() < 0.2]
-print(OBSTACLES)
-
 # Main Genetic Algorithm Class
 class GA:
     
@@ -18,6 +14,11 @@ class GA:
     def __init__(
                 self,
                 problem: Problem,
+                X: int,
+                Y: int,
+                H: int,
+                Room: Room,
+                obstacles: list,
                 parent_selection: int = 0,
                 survivor_selection: int = 0,
                 population_size: int = 30,
@@ -27,18 +28,14 @@ class GA:
                 ) -> None:
 
         # Initialising our GA selection schemes,from our Selectionschemes class
-        self.selection_schemes = SelectionSchemes(
-            population_size=population_size,
-            fitness_function=problem.fitness_function
-            )
-        
-        self.room = Room(X, Y, H, OBSTACLES)
-        self.x, self.y = X, Y
-        self.obstacles = OBSTACLES
+        self.selection_schemes = SelectionSchemes(population_size = population_size, fitness_function = problem.fitness_function) 
+
+        # Intializing our room to be used  
+        self.room = Room(X, Y, H, obstacles)
 
         # Initialsing our GA components from specified problem class that will be passed
-        self.chromosome = problem.chromosome
-        self.fitness_function = problem.fitness_function
+        self.chromosome = problem.chromosome(X,Y)
+        self.fitness_function = problem.fitness_function(self.room)
         self.mutate = problem.mutate
         self.crossover = problem.crossover
 
@@ -57,6 +54,7 @@ class GA:
         self.number_of_offsprings = number_of_offsprings
         self.number_of_generations = number_of_generations
         self.mutation_rate = mutation_rate
+
 
     # Define the initial_population function to create an initial population of chromosomes
     def initial_population(self) -> list:

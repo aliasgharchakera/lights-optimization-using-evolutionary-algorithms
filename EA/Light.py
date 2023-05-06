@@ -38,7 +38,7 @@ class Light(Problem):
 
     # CREATE FITNESS FUNCTION 
     @staticmethod
-    def fitness_function(Room,light_positions: list) -> float:
+    def fitness_function(Room: Room, light_positions: list) -> float:
         """Calculates the -----
 
         Args:
@@ -63,10 +63,10 @@ class Light(Problem):
         fitness = Number_lit_tiles/length_chromosone
 
         # reset function for room    
-        Room.reset_lights
-        Room.reset_tiles
+        Room.reset_lights()
+        Room.reset_tiles()
   
-        return 
+        return fitness
 
     # CROSSOVER COMPLETE 
     @staticmethod
