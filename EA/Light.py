@@ -12,7 +12,7 @@ class Light(Problem):
 
     # CREATE CHROMSONE REPRESENTATION !
     @staticmethod
-    def chromosome(width, height) -> list:
+    def chromosome(width, height, obstacles) -> list:
         """
         Returns:
             list: Returns a chromosome representing a possible solution of lights (grid) in the population
@@ -27,8 +27,15 @@ class Light(Problem):
         # Randomly generate the (x, y) positions for each light
         chromosone = []
         for i in range(num_lights):
-            x = random.randint(0, width-1)
-            y = random.randint(0, height-1)
+            while True:
+                # Generate a random position for the light
+                x = random.randint(0, width-1)
+                y = random.randint(0, height-1)
+                
+                # Check if the position is occupied by an obstacle
+                if (x, y) not in obstacles:
+                    break
+                    
             chromosone.append((x, y))
 
         # Return the list of light positions (chromosome)
