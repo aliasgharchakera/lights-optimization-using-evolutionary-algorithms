@@ -142,7 +142,7 @@ class Room:
                                 self.tiles[k][j].fill(2,fill)
                             elif j > pos_y and k > pos_x:
                                 # bottom left
-                                self.tiles[k][j].fill(8,fill)
+                                self.tiles[k][j].fill(0,fill)
          
         pass
     # internal functions
