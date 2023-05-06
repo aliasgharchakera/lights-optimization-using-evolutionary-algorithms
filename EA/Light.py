@@ -1,11 +1,6 @@
 import random
 from Problem import Problem
 
-
-from create_room import Room
-from lights import Lights
-from tiles import Tile
-
 class Light(Problem):
 
     # inverse_fitness = True # variable used if we are to generate grpahs S

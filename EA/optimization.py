@@ -1,11 +1,11 @@
 import matplotlib.pyplot as plt
 import pandas as pd
-# from Evolution.evolution import Evolution
-# from Evolution.problem import Problem
-from Problem import Problem
-from Genetic_Algorithm import GA
-from Light import Light
-from create_room import Room
+
+
+from EA.Problem import Problem
+from EA.Genetic_Algorithm import GA
+from EA.Light import Light
+from Lumen.create_room import Room
 
 
 class Optimization:
