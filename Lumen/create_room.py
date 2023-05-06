@@ -30,14 +30,14 @@ class Room:
                 temp.append(lights.Lights(i, j, STANDARD_INTENSITY, self.height, STANDARD_BEAM_ANGLE))
             self.lights.append(temp)
         for c in obstacles:
-            self.add_obstacle(c[0], c[1], c[2])
+            self.add_obstacle(c[0], c[1],c[2],c[3])
         # print(self.lights)
         # print(self.tiles)
 
-    def add_obstacle(self, x, y, obstacle):
+    def add_obstacle(self, x, y, obstacle, height):
         '''obstacle is 0 for north wall, 1 for east wall, 2 for south wall, 3 for west wall
         height is 0 for flat and >0 for raised'''
-        self.tiles[x][y].create_obstacle(obstacle, 0)
+        self.tiles[x][y].create_obstacle(obstacle, height)
 
     def light_light(self, x, y):
         '''lights up the light at (x,y)'''
