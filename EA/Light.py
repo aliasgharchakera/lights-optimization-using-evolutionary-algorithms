@@ -126,7 +126,7 @@ class Light(Problem):
         # return mutated choromose
         return individual
 
-light = Light()
-print(light.chromosome(5,5))
-r=Room(20,20,20,[(0,2,2,0)])
-print(light.fitness_function(r,light.chromosome(5,5)))
+# light = Light()
+# print(light.chromosome(5,5))
+# r=Room(20,20,20,[(0,2,2,0)])
+# print(light.fitness_function(r,light.chromosome(5,5)))

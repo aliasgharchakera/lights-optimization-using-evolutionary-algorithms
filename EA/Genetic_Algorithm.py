@@ -1,10 +1,19 @@
 import random
 
+import os
+import sys
+
+# add the parent directory of the current directory to the Python path
+current_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.dirname(current_dir)
+sys.path.append(parent_dir)
+
 # Importing our abstract Problem class and our selection scheme class
 from EA.Problem import Problem
 from EA.Selection_schemes import SelectionSchemes
 from EA.Light import Light
 from Lumen.create_room import Room
+
 
 
 # Main Genetic Algorithm Class
@@ -17,8 +26,7 @@ class GA:
                 X: int,
                 Y: int,
                 H: int,
-                Room: Room,
-                obstacles: list,
+                room: Room,
                 parent_selection: int = 0,
                 survivor_selection: int = 0,
                 population_size: int = 30,
@@ -30,12 +38,14 @@ class GA:
         # Initialising our GA selection schemes,from our Selectionschemes class
         self.selection_schemes = SelectionSchemes(population_size = population_size, fitness_function = problem.fitness_function) 
 
-        # Intializing our room to be used  
-        self.room = Room(X, Y, H, obstacles)
+        self.x = X
+        self.y = Y
+        self.h = H
+        self.room = room
 
         # Initialsing our GA components from specified problem class that will be passed
-        self.chromosome = problem.chromosome(X,Y)
-        self.fitness_function = problem.fitness_function(self.room)
+        self.chromosome = problem.chromosome
+        self.fitness_function = problem.fitness_function
         self.mutate = problem.mutate
         self.crossover = problem.crossover
 
@@ -63,7 +73,11 @@ class GA:
         Returns:
             list: List of chromosomes of length population_size
         """
-        return [self.chromosome(self.x, self.y) for _ in range(self.population_size)]
+        population = []
+        for i in range(self.population_size):
+            individual = self.chromosome(self.x, self.y)
+            population.append(individual)
+        return population
 
     # Define the get_best_individual function to find the fittest chromosome from the population
     def get_best_individual(self, population: list):
@@ -72,7 +86,7 @@ class GA:
         Args:
             population (list): List of chromosomes
         """
-        return max(population, key=self.fitness_function)
+        return max(population, key=self.fitness_function(self.room,population))
 
     # Define the get_best_fitness function to find the best fitness of the population
     def get_best_fitness(self, population: list) -> float:
@@ -254,3 +268,18 @@ class GA:
         
         # Return the list of best fitness values for each generation
         return fitness_lst
+
+
+opt = GA(
+    problem=Light,
+    X = 10,
+    Y = 10,
+    H = 10,
+    room = Room(10,10,10,[(0,0,0,0)]),
+    population_size=30,
+    number_of_offsprings=10,
+    number_of_generations=100,
+    mutation_rate=0.50
+    )
+
+print(opt.run())

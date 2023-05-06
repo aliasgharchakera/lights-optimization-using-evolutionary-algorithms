@@ -63,7 +63,6 @@ class SelectionSchemes:
             Such that the probability of a chromosome being selected is
             (fitness of chromosone) / (sum of all fitnesses).
         """
-
         fitness_lst = list(map(self.fitness_function, population))
         total_fitness = sum(fitness_lst)
         probabilities = list(map(lambda x: x / total_fitness, fitness_lst))

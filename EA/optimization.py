@@ -1,8 +1,11 @@
 import matplotlib.pyplot as plt
 import pandas as pd
 
-import sys
-sys.path.append("C:/Users/ibii/Documents/GitHub/CI-Spring23-Project/")
+import os, sys
+# add the parent directory of the current directory to the Python path
+current_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.dirname(current_dir)
+sys.path.append(parent_dir)
 
 from EA.Problem import Problem
 from EA.Genetic_Algorithm import GA
@@ -15,6 +18,10 @@ class Optimization:
     def __init__(
         self,
         problem: Problem,
+        X: int,
+        Y: int,
+        H: int,
+        room: Room,
         population_size: int = 30,
         number_of_offsprings: int = 10,
         number_of_generations: int = 100,
@@ -41,21 +48,32 @@ class Optimization:
 
         self.mutation_rate = mutation_rate
         self.selection_case = selection_case
-        # self.room = Room()
 
+        self.x = X
+        self.y = Y
+        self.h = H
+        self.room = room
+        
     def evolve(self) -> GA:
         """Returns an Evolution object
 
         Returns:
             Evolution: Evolution object
         """
-        return GA(problem=self.problem,
-                         mutation_rate=self.mutation_rate,
-                         population_size=self.population_size,
-                         parent_selection=self.selection_case[0],
-                         survivor_selection=self.selection_case[1],
-                         number_of_generations=self.number_of_generations,
-                         number_of_offsprings=self.number_of_offsprings)
+        return GA(
+                problem=self.problem,
+                X = self.x,
+                Y = self.y,
+                H = self.h,
+                room = self.room,
+                mutation_rate=self.mutation_rate,
+                population_size=self.population_size,
+                parent_selection=self.selection_case[0],
+                survivor_selection=self.selection_case[1],
+                number_of_generations=self.number_of_generations,
+                number_of_offsprings=self.number_of_offsprings
+                )
+    
 
     def get_title(self, fitness_type: str) -> str:
         """Returns the title of the plot
@@ -152,5 +170,17 @@ class Optimization:
         plt.savefig("Analysis/" + filename + ".png")
         plt.close()
 
-opt = Optimization(problem=Light, population_size=30, number_of_offsprings=10, number_of_generations=100, mutation_rate=0.50, number_of_iterations=10, selection_case=(0, 0))
-opt.evolve()
+opt = Optimization(
+    problem=Light,
+    X = 10,
+    Y = 10,
+    H = 10,
+    room = Room(10,10,10,[(0,0,0,0)]),
+    population_size=30,
+    number_of_offsprings=10,
+    number_of_generations=100,
+    mutation_rate=0.50,
+    number_of_iterations=10,
+    selection_case=(0, 0))
+
+print(opt.evolve())
