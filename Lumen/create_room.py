@@ -77,8 +77,8 @@ class Room:
             # shadows 
             shadows = []
             shadows_cordinates = []
-            for k in range(n_of_tiles_h_w):
-                for j in range(n_of_tiles_h_l):
+            for k in range(n_of_tiles_h_w-1):
+                for j in range(n_of_tiles_h_l-1):
                     try:
                         if self.tiles[pos_x+k][pos_y+j].obstacle==None or self.tiles[pos_x+k][pos_y+j].height == 0:
                             pass
