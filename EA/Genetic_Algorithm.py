@@ -6,6 +6,7 @@ from EA.Selection_schemes import SelectionSchemes
 
 # Main Genetic Algorithm Class
 class GA:
+    
     # Constructor for the initialisation of our GA
     def __init__(
                 self,

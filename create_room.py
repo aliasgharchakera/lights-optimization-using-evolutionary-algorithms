@@ -16,6 +16,7 @@ class Room:
         self.width = width
         self.height = height
         self.length = length
+        # includes obstacles, positiong, height etc..
         self.tiles = []
         for i in range(X):
             temp = []
@@ -24,6 +25,8 @@ class Room:
                 # self.tiles.append(tiles.Tile(i, j, 0, 0))
             self.tiles.append(temp)
         self.lights = []
+
+        # empty position of lights 
         for i in range(X):
             temp = []
             for j in range(Y):
@@ -37,17 +40,18 @@ class Room:
         height is 0 for flat and >0 for raised'''
         self.tiles[x][y].create_obstacle(obstacle, 0)
 
+    # for chromosone, list of possible light locations that will be lit up
     def light_light(self, x, y):
         '''lights up the light at (x,y)'''
         self.lights[x][y].light()
-
+    # reset for each possible solution
     def reset_lights(self):
         '''turns off all the lights'''
         for i in range(X):
             for j in range(Y):
                 self.lights[i][j].unlight()
         
-    
+    # all properties of a light 
     def get_light_functions(self):
         '''returns a list of tuples of the form (distance_on_width, distance_on_length, radius)'''
         light_functions = []
@@ -101,7 +105,7 @@ class Room:
         return shadow_length
 
             
-    
+    # main calulation function
     def light_tiles(self):
         '''lights up all the tiles that are lit'''
         light_functions = self.get_light_functions()
