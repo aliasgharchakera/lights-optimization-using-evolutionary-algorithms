@@ -6,6 +6,8 @@ Y = 10
 STANDARD_INTENSITY = 100
 STANDARD_BEAM_ANGLE = 45
 
+MINIMUM_INTENSITY = 0.5
+
 class Room:
 
     def __init__(self, width, height, length):
@@ -25,9 +27,6 @@ class Room:
             for j in range(Y):
                 temp.append(lights.Lights(i, j, STANDARD_INTENSITY, self.height, STANDARD_BEAM_ANGLE))
             self.lights.append(temp)
-
-    def create_tiles(self, x, y, obstacle, height):
-        self.tiles.append(tiles.Tile(x, y, obstacle, height))
 
     def add_obstacle(self, x, y, obstacle):
         '''obstacle is 0 for north wall, 1 for east wall, 2 for south wall, 3 for west wall
@@ -52,16 +51,31 @@ class Room:
         # distance_on_width, distance_on_length, radius
         return light_functions
     
+    def reset_tiles(self):
+        for i in range(X):
+            for j in range(Y):
+                self.tiles[i][j].light_down()
     
+    def light_tiles(self):
+        # lights up all the tiles that are lit
+        light_functions = self.get_light_functions()
+
+        for i in range(len(light_functions)):
+            temp_x = light_functions[i][0]
+            temp_y = light_functions[i][1]
+            temp_radius = light_functions[i][2]
+
+            # add all the tiles that are lit
+            pos_x = (self.width/X)*temp_x
+            pos_y = (self.length/Y)*temp_y
+        
+                
+        pass
     def num_lit_tiles(self):
         # returns the number of tiles that are lit
         pass
 
     
-
-    def light_lights(self, x,y):
-        # lights up the light on that coordinate 
-        self.lights[x*self.width + y].light()
 
         
 
