@@ -121,28 +121,28 @@ class Room:
                                 self.tiles[k][j].light_up()
                             elif j < pos_y and k == pos_x:
                                 # this means it is right above the light
-                                self.tiles[k][j].fill(fill,5)
+                                self.tiles[k][j].fill(5,fill)
                             elif j > pos_y and k == pos_x:
                                 # right below
-                                self.tiles[k][j].fill(fill,1)
+                                self.tiles[k][j].fill(1,fill)
                             elif j == pos_y and k < pos_x:
                                 # on the right
-                                self.tiles[k][j].fill(fill,3)
+                                self.tiles[k][j].fill(3,fill)
                             elif j == pos_y and k > pos_x:
                                 # on the left
-                                self.tiles[k][j].fill(fill,7)
+                                self.tiles[k][j].fill(7,fill)
                             elif j < pos_y and k < pos_x:
                                 # top right
-                                self.tiles[k][j].fill(fill,4)
+                                self.tiles[k][j].fill(4,fill)
                             elif j < pos_y and k > pos_x:
                                 # top left
-                                self.tiles[k][j].fill(fill,6)
+                                self.tiles[k][j].fill(6,fill)
                             elif j > pos_y and k < pos_x:
                                 # bottom right
-                                self.tiles[k][j].fill(fill,2)
+                                self.tiles[k][j].fill(2,fill)
                             elif j > pos_y and k > pos_x:
                                 # bottom left
-                                self.tiles[k][j].fill(fill,8)
+                                self.tiles[k][j].fill(8,fill)
          
         pass
     # internal functions
