@@ -90,7 +90,7 @@ def draw_floor(floor):
             draw_tile(tile_x, tile_y, color)
 
 # Main game loop
-def main_game_loop(floor_list):
+def main_game_loop(floor_list, lens_of_chromosomes):
     count_max = len(floor_list)
     count = 0
     while True:
@@ -115,7 +115,7 @@ def main_game_loop(floor_list):
 
         # Update the display
         pygame.display.flip()
-        
+
         time.sleep(0.5)
 
         # Limit the framerate to 60 FPS
