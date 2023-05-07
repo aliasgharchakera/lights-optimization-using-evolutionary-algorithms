@@ -1,4 +1,5 @@
 import Lumen.tiles as tiles
+# from Lumen.tiles import Tile
 import Lumen.lights as lights
 #from Lumen.window import Window
 import random

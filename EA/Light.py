@@ -113,10 +113,11 @@ class Light(Problem):
         # Tiles = []
         # Tiles.append(Room.tiles)
         # Reset the room
-        Room.reset_lights()
-        Room.reset_tiles()
 
-        return fitness, Room.tiles
+        tiles = Room.tiles
+        Room.reset()
+
+        return fitness, tiles
 
 
     # CROSSOVER COMPLETE 

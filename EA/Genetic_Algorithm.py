@@ -295,27 +295,62 @@ class GA:
             fit_tiles.append(tiles)
         
         # Return the list of best fitness values for each generation
-        return fitness_lst, fit_pouplation,fit_tiles
+        return fitness_lst, fit_pouplation,fit_tiles[-1]
 
+"""
+selection_methods = [
+    self.fitness_proportionate, self.ranked_selection,
+    self.tournament_selection, self.truncation, self.random_selection
+]
+0,0 100,13,43.5
+0,1 100,9,45.5
+0,2 98,9,44.5
+0,3 98,5,46.5
+0,4 97,14,41.5
 
-opt = GA(
-    problem=Light,
-    X = 10,
-    Y = 10,
-    H = 50,
-    room = Room(100,100,50,[(0,0,2,45),(5,5,2,42),(1,9,2,10),(3,9,1,4)],2),
-    parent_selection = 1,
-    survivor_selection = 1,
-    population_size=30,
-    number_of_offsprings=10,
-    number_of_generations=100,
-    mutation_rate=0.50
-    )
+1,0 97,8,44.5
+1,1 99,7,46
+1,2 99,10,45
+1,3 99,8,45.5
+1,4 100,11,44.5
 
-population = (opt.initial_population())
+2,0 99,8,45.5
+2,1 100,9,45.5
+2,2 100,8,46
+2,3 99,9,45
+2,4 98,7,45.5
 
-fitness, population, tiles= (opt.run())
-print(fitness, "\n",population,"\n", tiles)
+3,0 98,7,45.5
+3,1 97,7,45.5
+3,2 99,6,46.5
+3,3 99,7,46
+3,4 99,7,46
+
+4,0 97,6,45.5
+4,1 100,11,44.5
+4,2 99,7,46
+4,3 100,8,46
+4,4 99,13,43
+
+"""
+# opt = GA(
+#     problem=Light,
+#     X = 10,
+#     Y = 10,
+#     H = 50,
+#     room = Room(100,100,50,[(0,0,2,45),(5,5,2,42),(1,9,2,10),(3,9,1,4)],2,[(0,0,0,0)]),
+#     parent_selection = 3,
+#     survivor_selection = 2,
+#     population_size=30,
+#     number_of_offsprings=10,
+#     number_of_generations=100,
+#     mutation_rate=0.50
+#     )
+
+# population = (opt.initial_population())
+
+# fitness, population, tiles= (opt.run())
+# print(fitness, "\n",population,"\n", tiles)
 # for each in fitness:
 #     print (each)
 
