@@ -6,6 +6,8 @@ from datetime import datetime
 LATITUDE = '24.8607'  # latitude of Karachi
 LONGITUDE = '67.0011'  # longitude of Karachi
 SUN_MAX = 100
+X = 10 # boxes it will be divided in
+Y = 10
 
 class Window:
     def __init__(self, x, y, width, length, height, room_width, room_length, time):
@@ -16,6 +18,7 @@ class Window:
         self.length = length
         self.height = height
         self.room_width = room_width
+        
         self.room_length = room_length
         self.time = time
         self.direction = ''
@@ -48,37 +51,45 @@ class Window:
         self.sun_azimuth = math.degrees(sun.az)  # azimuth of the sun in degrees
         print('time: ', time,'sun_altitude: ', self.sun_altitude, 'sun_azimuth: ', self.sun_azimuth)
 
+
+    def calculate_surface_area(self):
+        pass
+        
     def get_lit_coordinates(self):
+        width_of_tile = self.room_width/X
+        length_of_tile = self.room_length/Y
         lit_coordinates = []
         # calculate the starting and ending coordinates of the lit region
         if self.direction == 'w':
             start_x = 0
-            end_x = self.width
+            end_x = self.width/width_of_tile
             start_y = self.y
-            end_y = self.y + self.length
+            end_y = min(Y,self.y + self.length/length_of_tile)
         elif self.direction == 'e':
-            start_x = self.room_width - self.width
-            end_x = self.room_width
+            start_x = max(self.room_width - self.width/width_of_tile, 0)
+            end_x = X
             start_y = self.y
-            end_y = self.y + self.length
+            end_y = min(Y, self.y + self.length/length_of_tile)
         elif self.direction == 'n':
             start_x = self.x
-            end_x = self.x + self.width
+            end_x = min(X, self.x + self.width/width_of_tile)
             start_y = 0
-            end_y = self.length
+            end_y = self.length/length_of_tile
         elif self.direction == 's':
             start_x = self.x
-            end_x = self.x + self.width
-            start_y = self.room_length - self.length
-            end_y = self.room_length
+            end_x = min(X, self.x + self.width/width_of_tile)
+            start_y = max(self.room_length - self.length/length_of_tile, 0)
+            end_y = Y
         
         # iterate through each point in the lit region
-        for x in range(start_x, end_x):
-            for y in range(start_y, end_y):
+        # for x in range(int(start_x), int(end_x)):
+        #     for y in range(int(start_y),int(end_y)):
+        for x in range(X):
+            for y in range(Y):
                 # calculate the angle between the window and the point
-                dx = (self.x + self.width/2) - x
-                dy = (self.y + self.length/2) - y
-                dz = self.height
+                dx = (self.x*width_of_tile + self.width/2) - x
+                dy = (self.y*length_of_tile + self.length/2) - y
+                dz = self.height + self.length
                 dot_product = dx*math.cos(math.radians(self.sun_azimuth)) + dy*math.sin(math.radians(self.sun_azimuth))
                 angle = math.degrees(math.acos(dot_product/(math.sqrt(dx**2+dy**2+dz**2))))
                 # if the angle is less than the sun's altitude, the point is lit
@@ -87,13 +98,13 @@ class Window:
         return lit_coordinates
 
 
-x = 30
-y = 100
-width = 25
-length = 20
-height = 5
-room_width = 100
-room_length = 100
+x = 0
+y = 2
+width = 3
+length = 2
+height = 2
+room_width = 10
+room_length = 10
 # time = 12
 for time in range(24):
     window = Window(x, y, width, length, height, room_width, room_length, time)

@@ -26,7 +26,7 @@ class Room:
         else:
             x = random.randint(2, X-3)
             y = random.choice([0, Y-1])
-        self.window = Window(x, y, self.width//3, self.height//3, 2, 100, self.width, self.length, time)
+        self.window = Window(x, y, self.width//3, self.height//3, 2, 100, X, Y, time)
         for i in range(X):
             temp = []
             for j in range(Y):
@@ -43,6 +43,12 @@ class Room:
             self.add_obstacle(c[0], c[1],c[2],c[3])
         # print(self.lights)
         # print(self.tiles)
+        
+    def get_window_direct_light(self):
+        return self.window.get_lit_coordinates()
+        
+    def get_window_shadow(self):
+        self.window.sun_altitude
 
     def num_lit_tiles(self):
         # returns the number of tiles that are lit
