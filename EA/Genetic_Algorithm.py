@@ -98,6 +98,7 @@ class GA:
         
         # Find the index of the chromosome with the highest fitness value
         best_fitness_index = fitness_values.index(max(fitness_values))
+        # best_fitness_index = fitness_values.index(max(fitness_values[0]))
         # print(best_fitness_index)
         # Return the chromosome with the highest fitness value
         return population[best_fitness_index]
@@ -119,6 +120,7 @@ class GA:
             # print(best_chromosome)
             # Calculate the fitness of the best chromosome
             return self.fitness_function(self.room,best_chromosome)
+            return self.fitness_function(self.room,best_chromosome[0])
 
 
     # ----------------------------------------- SELECTION SCHEMES ------------------------------------------- #
@@ -276,6 +278,7 @@ class GA:
         fitness_lst = []
         
         fit_pouplation = []
+
         # Iterate over the specified number of generations
         for _ in range(self.number_of_generations):
             
@@ -287,6 +290,7 @@ class GA:
             # Appenf the best population of current generation to the list 
             fit_pouplation.append(population)
 
+
         
         # Return the list of best fitness values for each generation
         return fitness_lst, fit_pouplation
@@ -296,8 +300,8 @@ opt = GA(
     problem=Light,
     X = 10,
     Y = 10,
-    H = 10,
-    room = Room(100,100,50,[(0,0,0,0)],2),
+    H = 50,
+    room = Room(100,100,50,[(0,0,2,45),(5,5,2,42),(1,9,2,10),(3,9,1,4)],2),
     population_size=30,
     number_of_offsprings=10,
     number_of_generations=100,
@@ -316,6 +320,6 @@ print(fitness, "\n",population)
 # for each in fitness:
 #     print (each)
 
-for each in population:
-    print (each)
-    print()
+# for each in population:
+#     print (each)
+#     print()
