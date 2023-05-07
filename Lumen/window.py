@@ -96,6 +96,24 @@ class Window:
                 if angle < self.sun_altitude:
                     lit_coordinates.append((x,y))
         return lit_coordinates
+    
+    def get_length_shadow(self):
+        # we are assuming that the sun at all times is right in front of the window 
+        # for a more accurate result you may use a more accurate description of sunlight 
+        start_length_sun = self.height * math.tan(math.radians(self.sun_altitude))
+        stop_length_sun = (self.height + self.length) * math.tan(math.radians(self.sun_altitude))
+        # 0 -> the starting of the direct sunlight 
+        # 1 -> the end of the direct sunlight
+        return start_length_sun, stop_length_sun
+    
+    def get_width_shadow(self):
+        return self.width
+    
+    def calculate_direct_sunlight(self):
+        starting_sun_light, ending_sun_light = self.get_length_shadow()
+        width_of_tile = self.room_width/X
+        
+
 
 
 x = 0
