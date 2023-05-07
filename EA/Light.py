@@ -43,38 +43,60 @@ class Light(Problem):
         return chromosone
 
     # CREATE FITNESS FUNCTION 
+    # @staticmethod
+    # def fitness_function(Room: Room, light_positions: list) -> float:
+    #     """Calculates the -----
+
+    #     Args:
+    #         route (list): ----
+
+    #     Returns:
+    #         float: ----
+    #     """
+
+    #     length_chromosone = len(light_positions)
+
+    #     for x,y in light_positions:
+    #         Room.light_light(x, y)
+        
+    #     # run, does all claulations
+    #     Room.light_tiles()
+
+    #     # return the actual lit tiles, based on al calulation
+    #     Number_lit_tiles = Room.num_lit_tiles()
+    #     print("num lit tiles : ",Number_lit_tiles," len of chromosone : ", length_chromosone)
+    #     # divide by chromosone length 
+    #     fitness = 0.0
+    #     if length_chromosone > 0:
+    #         fitness = Number_lit_tiles / length_chromosone
+
+    #     # reset function for room    
+    #     Room.reset_lights()
+    #     Room.reset_tiles()
+  
+    #     return fitness
     @staticmethod
-    def fitness_function(Room: Room, light_positions: list) -> float:
-        """Calculates the -----
-
-        Args:
-            route (list): ----
-
-        Returns:
-            float: ----
-        """
-
-        length_chromosone = len(light_positions)
-
+    def fitness_function(Room: Room, light_positions: list, w: float = 0.5) -> float:
+        # Calculate the number of lit tiles
         for x,y in light_positions:
             Room.light_light(x, y)
-        
-        # run, does all claulations
+
         Room.light_tiles()
+        num_lit_tiles = Room.num_lit_tiles()
 
-        # return the actual lit tiles, based on al calulation
-        Number_lit_tiles = Room.num_lit_tiles()
-        print("num",Number_lit_tiles)
-        # divide by chromosone length 
-        fitness = 0.0
-        if length_chromosone > 0:
-            fitness = Number_lit_tiles / length_chromosone
+        # Calculate the number of lights in the chromosome
+        num_lights = len(light_positions)
+        print("num lit tiles : ",num_lit_tiles," len of chromosone : ", len(light_positions))
 
-        # reset function for room    
+        # Calculate the fitness as a weighted sum of the two objectives
+        fitness = w * num_lit_tiles - (1 - w) * num_lights
+
+        # Reset the room
         Room.reset_lights()
         Room.reset_tiles()
-  
+
         return fitness
+
 
     # CROSSOVER COMPLETE 
     @staticmethod

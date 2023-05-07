@@ -7,7 +7,7 @@ import math
 X = 10 # boxes it will be divided in
 Y = 10
 STANDARD_INTENSITY = 100
-STANDARD_BEAM_ANGLE = 45
+STANDARD_BEAM_ANGLE = 15
 
 
 MINIMUM_FILL = 0.6
@@ -258,12 +258,26 @@ class Room:
                             s_temp = s_temp - (self.width/X)
         return shadow_list_north, shadow_list_east, shadow_list_south, shadow_list_west
                     
-    
+    # def neighbourhood_lights(self, x, y, intensity):
+    #     if intensity < 0.2:
+    #         return
+    #     try:
+    #         self.tiles[x][y].less_intense_lit(intensity)
+    #         self.neighbourhood_lights(x+1, y, intensity-0.2)
+    #         self.neighbourhood_lights(x-1, y, intensity-0.2)
+    #         self.neighbourhood_lights(x, y+1, intensity-0.2)
+    #         self.neighbourhood_lights(x, y-1, intensity-0.2)
+    #     except IndexError:
+    #         print("x: ", x,", y: ",y)
+    #         pass
+
     def neighbourhood_lights(self,x,y, intensity):
         if intensity < 0.2:
             return
+        elif (x <= 0) or (y <= 0) or (x >= X) or (y >= Y):
+            return
         else:
-            self.lights[x][y].light()
+            self.tiles[x][y].less_intense_lit(intensity)
             self.neighbourhood_lights(x+1,y,intensity-0.2)
             self.neighbourhood_lights(x-1,y,intensity-0.2)
             self.neighbourhood_lights(x,y+1,intensity-0.2)
