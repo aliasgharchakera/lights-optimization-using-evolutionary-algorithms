@@ -2,7 +2,7 @@ import ephem
 import math
 import pytz
 from datetime import datetime
-# import pylib
+import pvlib
 import pandas as pd
 
 LATITUDE = '24.8607'  # latitude of Karachi
@@ -73,6 +73,8 @@ class Window:
         width_of_tile = self.room_width/X
         length_of_tile = self.room_length/Y
         lit_coordinates = []
+        d = 0
+        
         # calculate the starting and ending coordinates of the lit region
         if self.direction == 'w':
             start_x = 0
@@ -110,10 +112,59 @@ class Window:
                 if angle < self.sun_altitude:
                     lit_coordinates.append((x,y))
         return lit_coordinates
+    
+    def get_length_shadow(self):
+        # we are assuming that the sun at all times is right in front of the window 
+        # for a more accurate result you may use a more accurate description of sunlight 
+        start_length_sun = self.height * math.tan(math.radians(self.sun_altitude))
+        stop_length_sun = (self.height + self.length) * math.tan(math.radians(self.sun_altitude))
+        # 0 -> the starting of the direct sunlight 
+        # 1 -> the end of the direct sunlight
+        return start_length_sun, stop_length_sun
+    
+    def get_width_shadow(self):
+        return self.width
+    
+    def calculate_direct_sunlight(self):
+        starting_sun_light, ending_sun_light = self.get_length_shadow()
+        width_of_tile = self.room_width/X
+        length_of_tile = self.room_length/Y
 
-    # def calculate_lumens(self):
-    #     # Define the location and time of interest
-    #     timezone = 'Asia/Karachi'
+        start_x = 0
+        end_x = 0
+        start_y = 0
+        end_y = 0
+        '''obstacle is 0 for north wall, 1 for east wall, 2 for south wall, 3 for west wall
+        height is 0 for flat and >0 for raised'''
+
+        # calculate the starting and ending coordinates of the lit region
+        if self.direction == 'w':
+            d = 3
+            start_x = self.x
+            end_x = min(X, self.x + math.ceil(self.width/width_of_tile))
+            start_y = min(Y,0 + math.ceil(starting_sun_light/length_of_tile))
+            end_y = min(Y,math.ceil(starting_sun_light/length_of_tile) + math.ceil(ending_sun_light/length_of_tile))
+        elif self.direction == 'e':
+            d = 1
+            start_x = self.x
+            end_x = min(X, self.x + math.ceil(self.width/width_of_tile))
+            start_y = max(0,Y - math.ceil(starting_sun_light/length_of_tile))
+            end_y = max(0, Y - math.ceil(starting_sun_light/length_of_tile)  - math.ceil(ending_sun_light/length_of_tile))
+        elif self.direction == 'n':
+            d = 0
+            start_x = min(X, 0 + math.ceil(starting_sun_light/width_of_tile))
+            end_x = min(X, math.ceil(starting_sun_light/width_of_tile) + math.ceil(ending_sun_light/width_of_tile))
+            start_y = self.y
+            end_y = min(Y, self.y + math.ceil(self.length/length_of_tile))
+        elif self.direction == 's':
+            d = 2
+            start_x = max(0, X - math.ceil(starting_sun_light/width_of_tile))
+            end_x = max(0, X - math.ceil(starting_sun_light/width_of_tile) - math.ceil(ending_sun_light/width_of_tile))
+            start_y = self.y
+            end_y = self.y + math.ceil(self.length/length_of_tile)
+
+        return start_x, end_x, start_y, end_y, self.direction
+
         
     #     date = pd.date_range(start=f'2023-05-08 {self.time}:00:00', periods=1, freq='H', tz=timezone)
 
@@ -139,22 +190,22 @@ class Window:
         
     #     print(irradiance_in_lumens)
 
-
-x = 0
-y = 2
-width = 3
-length = 2
-height = 2
-room_width = 10
-room_length = 10
-# time = 12
-for time in range(24):
-    window = Window(x, y, width, length, height, room_width, room_length, time)
-    # window.calculate_direct_sunlight_region()
-    # print(window.calculate_direct_sunlight_region())
-    # window.get_lit_coordinates()
-    # print(window.get_lit_coordinates())
-    window.calculate_lumens()
+if __name__ == "__main__":
+    x = 0
+    y = 2
+    width = 3
+    length = 2
+    height = 2
+    room_width = 10
+    room_length = 10
+    # time = 12
+    for time in range(24):
+        window = Window(x, y, width, length, height, room_width, room_length, time)
+        # window.calculate_direct_sunlight_region()
+        # print(window.calculate_direct_sunlight_region())
+        # window.get_lit_coordinates()
+        print(window.get_lit_coordinates())
+        # window.calculate_lumens()
     
 # # create a window
 # window = Window(x=0, y=0, width=2, height=2, elevation=0, intensity=1, room_width=10, room_length=10, time=21)
