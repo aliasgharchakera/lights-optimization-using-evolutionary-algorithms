@@ -72,11 +72,44 @@ def draw_tile(tile_x, tile_y, color):
     glEnd()
 
 # Define a function to draw the floor
+def draw_obstacle (x,y,z,side):
+    # define the vertices of the cube
+    vertices = [
+    (x, y, z), # front bottom left
+    (x + TILE_SIZE, y, z), # front bottom right
+    (x + TILE_SIZE, y + TILE_SIZE, z), # front top right
+    (x, y + TILE_SIZE, z), # front top left
+    (x, y, z + TILE_SIZE), # back bottom left
+    (x + TILE_SIZE, y, z + TILE_SIZE), # back bottom right
+    (x + TILE_SIZE, y + TILE_SIZE, z + TILE_SIZE), # back top right
+    (x, y + TILE_SIZE, z + TILE_SIZE), # back top left
+    ]
+
+    # define the indices of the vertices for each face
+    indices = [
+    (0, 1, 2, 3), # front face
+    (4, 5, 6, 7), # back face
+    (0, 1, 5, 4), # bottom face
+    (2, 3, 7, 6), # top face
+    (0, 3, 7, 4), # left face
+    (1, 2, 6, 5), # right face
+    ]
+
+# draw the cube with one side missing
+    glBegin(GL_QUADS)
+    for i, face in enumerate(indices):
+        if i != 4: # skip the left face
+            for vertex_index in face:
+                glVertex3fv(vertices[vertex_index])
+    glEnd()
+
 def draw_floor(floor):
     for i in range(FLOOR_WIDTH):
         for j in range(FLOOR_HEIGHT):
             tile_x = i * TILE_SIZE - ROOM_WIDTH/2
             tile_y = j * TILE_SIZE - ROOM_DEPTH/2
+            if floor[i][j].height > 0:
+                draw_obstacle(i, j, floor[i][j].height, 0)
             if floor[i][j].give_status() == True:
                 color = lit_color
             elif floor[i][j].intensity > 0:

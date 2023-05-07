@@ -24,7 +24,7 @@ class Room:
         self.windows = []
 
         for i in range(len(window_list)):
-            self.windows.append(Window(window_list[i][0], window_list[i][1], window_list[i][2], window_list[i][3], height, width, length, time))
+            self.windows.append(Window(window_list[i][0], window_list[i][1], window_list[i][2], window_list[i][3], window_list[i][4], width, length, time))
             
         for i in range(X):
             temp = []
@@ -196,6 +196,12 @@ class Room:
                 for k in range(start_y, end_y):
                     if (j,k) not in shadow_tiles:
                         self.tiles[j][k].light_up()
+
+            self.neighbourhood_lights(start_x,start_y, 0.5)
+            self.neighbourhood_lights(end_x,end_y, 0.5)
+            self.neighbourhood_lights(start_x,end_y, 0.5)
+            self.neighbourhood_lights(end_x,start_y, 0.5)
+            
 
 
         
