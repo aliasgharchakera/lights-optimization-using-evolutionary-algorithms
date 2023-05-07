@@ -1,9 +1,10 @@
 import random
+from Lumen.create_room import Room
 
 # Selection classs that contains different types of selection schemes 
 class SelectionSchemes:
 
-    def __init__(self, fitness_function, population_size: int) -> None:
+    def __init__(self, fitness_function, room : Room, chromosone: list, population_size: int) -> None:
         """Initializes the selection schemes class with the fitness function
         and population size
 

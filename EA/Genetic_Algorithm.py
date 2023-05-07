@@ -34,10 +34,7 @@ class GA:
                 number_of_generations: int = 100,
                 mutation_rate: float = 0.50
                 ) -> None:
-
-        # Initialising our GA selection schemes,from our Selectionschemes class
-        self.selection_schemes = SelectionSchemes(population_size = population_size, fitness_function = problem.fitness_function) 
-
+         
         self.x = X
         self.y = Y
         self.h = H
@@ -49,6 +46,14 @@ class GA:
         self.mutate = problem.mutate
         self.crossover = problem.crossover
 
+        # Initialising our GA selection schemes,from our Selectionschemes class
+        self.selection_schemes = SelectionSchemes(
+            fitness_function = problem.fitness_function,
+            room=self.room,
+            chromosone = self.chromosome,
+            population_size = population_size
+            )
+        
         """
         selection_methods = [
             self.fitness_proportionate, self.ranked_selection,
@@ -86,7 +91,19 @@ class GA:
         Args:
             population (list): List of chromosomes
         """
-        return max(population, key=self.fitness_function(self.room,population))
+        # Calculate the fitness of each chromosome in the population
+        fitness_values = []
+        for chromosome in population:
+            fitness = self.fitness_function(self.room, chromosome)
+            fitness_values.append(fitness)
+        
+        # Find the index of the chromosome with the highest fitness value
+        best_fitness_index = fitness_values.index(max(fitness_values))
+        print(best_fitness_index)
+        # Return the chromosome with the highest fitness value
+        return population[best_fitness_index]
+        
+        #return max(population, key=self.fitness_function(self.room,population))
 
     # Define the get_best_fitness function to find the best fitness of the population
     def get_best_fitness(self, population: list) -> float:
@@ -100,9 +117,9 @@ class GA:
             """
             # Find the best chromosome in the population
             best_chromosome = self.get_best_individual(population)
-            
+            print(best_chromosome)
             # Calculate the fitness of the best chromosome
-            return self.fitness_function(best_chromosome)
+            return self.fitness_function(self.room,best_chromosome)
 
 
     # ----------------------------------------- SELECTION SCHEMES ------------------------------------------- #
@@ -253,7 +270,7 @@ class GA:
         """
         # Get the initial population
         population = self.initial_population()
-        print(population)
+        # print(population)
         # Create a list to store the best fitness value for each generation
         fitness_lst = []
         
@@ -270,16 +287,21 @@ class GA:
         return fitness_lst
 
 
-# opt = GA(
-#     problem=Light,
-#     X = 10,
-#     Y = 10,
-#     H = 10,
-#     room = Room(10,10,10,[(0,0,0,0)]),
-#     population_size=30,
-#     number_of_offsprings=10,
-#     number_of_generations=100,
-#     mutation_rate=0.50
-#     )
+opt = GA(
+    problem=Light,
+    X = 10,
+    Y = 10,
+    H = 10,
+    room = Room(100,100,50,[(0,0,0,0)],2),
+    population_size=30,
+    number_of_offsprings=10,
+    number_of_generations=100,
+    mutation_rate=0.50
+    )
 
-# print(opt.run())
+population = (opt.initial_population())
+for chromosone in population:
+    print (chromosone)
+print()
+print(opt.get_best_individual(population))
+print(opt.get_best_fitness(population))

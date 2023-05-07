@@ -64,9 +64,11 @@ class Light(Problem):
 
         # return the actual lit tiles, based on al calulation
         Number_lit_tiles = Room.num_lit_tiles()
-            
+        print("num",Number_lit_tiles)
         # divide by chromosone length 
-        fitness = Number_lit_tiles/length_chromosone
+        fitness = 0.0
+        if length_chromosone > 0:
+            fitness = Number_lit_tiles / length_chromosone
 
         # reset function for room    
         Room.reset_lights()
