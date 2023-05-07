@@ -1,6 +1,6 @@
 import Lumen.tiles as tiles
 import Lumen.lights as lights
-from Lumen.window import Window
+#from Lumen.window import Window
 import random
 import math
 
@@ -23,8 +23,8 @@ class Room:
         # windows will take x, y,width, length, height
         self.windows = []
 
-        for i in range(len(window_list)):
-            self.windows.append(Window(window_list[i][0], window_list[i][1], window_list[i][2], window_list[i][3], height, width, length, time))
+        # for i in range(len(window_list)):
+        #     self.windows.append(Window(window_list[i][0], window_list[i][1], window_list[i][2], window_list[i][3], height, width, length, time))
             
         for i in range(X):
             temp = []
