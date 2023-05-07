@@ -1,126 +1,106 @@
 import ephem
 import math
+import pytz
+from datetime import datetime
+
+LATITUDE = '24.8607'  # latitude of Karachi
+LONGITUDE = '67.0011'  # longitude of Karachi
+SUN_MAX = 100
 
 class Window:
-    def __init__(self, x, y, width, length, height, intensity, room_width, room_length, time):
+    def __init__(self, x, y, width, length, height, room_width, room_length, time):
         self.x = x
         self.y = y
         self.width = width
-        self.intensity = intensity
+        self.intensity = SUN_MAX
         self.length = length
         self.height = height
         self.room_width = room_width
         self.room_length = room_length
-        self.position = (self.x, self.y)
         self.time = time
         self.direction = ''
-        # [[0, 0], [0,1]
-        #  [1, 0], [1,1]]
         # determine the direction of the window using x and y
         if self.y == 0:
             self.direction = 'w'
-        elif self.y == room_width:
+        elif self.y == room_length:
             self.direction = 'e'
         elif self.x == 0:
             self.direction = 'n'
-        elif self.x == room_length:
+        elif self.x == room_width:
             self.direction = 's'
+            
 
         # use PyEphem to calculate the sun's position
         o = ephem.Observer() 
-        # 31.5204° N, 74.3587° E
-        o.lat = '31.5204'  # latitude of Karachi
-        o.long = '74.3587'  # longitude of Karachi
+        
+        tz = pytz.timezone('Asia/Karachi')
+        local_time = datetime(2023, 5, 7, time)
+        utc_time = tz.localize(local_time).astimezone(pytz.utc)
+        o.date = ephem.Date(utc_time) 
+        
+        o.lat = LATITUDE 
+        o.long = LONGITUDE
         o.elevation = self.height  # elevation of the window
-        time2 = "{:02d}:00".format(time)
-        # time += 5
-        o.date = ephem.Date('2023/5/7 ' + time2 + ':00:00')  # date and time of the observation
-        print(o.date)
+        # o.date = ephem.Date('2023/5/7 ' + str(self.time) + ':00:00')  # date and time of the observation
         sun = ephem.Sun()
         sun.compute(o)
         self.sun_altitude = math.degrees(sun.alt) # altitude of the sun in degrees
-        # print(self.sun_altitude)
-        # self.sun_angle = (12 - self.time) * 15
-        # sun_elevation = math.radians(90 - self.sun_angle)
-        # sunlight_x = (self.room_width / 2) + ((self.room_length / 2) / math.tan(sun_elevation))
-        # print(self.sun_altitude, self.sun_angle, self.time) 
-        # self.sun_altitude = 150
-        # self.sun_azimuth = math.degrees(sun.az)  # azimuth of the sun in degrees
+        self.sun_azimuth = math.degrees(sun.az)  # azimuth of the sun in degrees
+        print('time: ', time,'sun_altitude: ', self.sun_altitude, 'sun_azimuth: ', self.sun_azimuth)
+
+    def get_lit_coordinates(self):
+        lit_coordinates = []
+        # calculate the starting and ending coordinates of the lit region
+        if self.direction == 'w':
+            start_x = 0
+            end_x = self.width
+            start_y = self.y
+            end_y = self.y + self.length
+        elif self.direction == 'e':
+            start_x = self.room_width - self.width
+            end_x = self.room_width
+            start_y = self.y
+            end_y = self.y + self.length
+        elif self.direction == 'n':
+            start_x = self.x
+            end_x = self.x + self.width
+            start_y = 0
+            end_y = self.length
+        elif self.direction == 's':
+            start_x = self.x
+            end_x = self.x + self.width
+            start_y = self.room_length - self.length
+            end_y = self.room_length
         
+        # iterate through each point in the lit region
+        for x in range(start_x, end_x):
+            for y in range(start_y, end_y):
+                # calculate the angle between the window and the point
+                dx = (self.x + self.width/2) - x
+                dy = (self.y + self.length/2) - y
+                dz = self.height
+                dot_product = dx*math.cos(math.radians(self.sun_azimuth)) + dy*math.sin(math.radians(self.sun_azimuth))
+                angle = math.degrees(math.acos(dot_product/(math.sqrt(dx**2+dy**2+dz**2))))
+                # if the angle is less than the sun's altitude, the point is lit
+                if angle < self.sun_altitude:
+                    lit_coordinates.append((x,y))
+        return lit_coordinates
 
-    def calculate_direct_sunlight_region(self):
-        direct_sunlight_region = []
 
-        # calculate the position of the sun based on the time of day
-        sun_elevation = math.radians(self.sun_altitude)
-        sunlight_x = (self.room_width / 2) + ((self.room_length / 2) / math.tan(sun_elevation))
-        print('sun_altitude', self.sun_altitude, 'sun_elevation', sun_elevation, 'sunlight_x', sunlight_x)
-        # print('sun_elevation', sun_elevation, 'sunlight_x', sunlight_x)
-
-        # check if the sunlight is to the left of the room
-        if sunlight_x < 0:
-            # check if the window faces west
-            if self.direction == 'w':
-                direct_sunlight_region.append((self.x, self.y))
-                direct_sunlight_region.append((self.x, self.y + self.length))
-            else:
-                direct_sunlight_region = []
-        # check if the sunlight is to the right of the room
-        elif sunlight_x > self.room_width:
-            # check if the window faces east
-            if self.direction == 'e':
-                direct_sunlight_region.append((self.x + self.width, self.y))
-                direct_sunlight_region.append((self.x + self.width, self.y + self.length))
-            else:
-                direct_sunlight_region = []
-        else:
-            # calculate the position of the sun's ray at the length of the window
-            sunlight_y = (sunlight_x - (self.room_width / 2)) * math.tan(sun_elevation)
-
-            # check if the sunlight is above the room
-            if sunlight_y < 0:
-                # check if the window faces north
-                if self.direction == 'n':
-                    direct_sunlight_region.append((self.x, self.y))
-                    direct_sunlight_region.append((self.x + self.width, self.y))
-                else:
-                    direct_sunlight_region = []
-            # check if the sunlight is below the room
-            elif sunlight_y > self.room_length:
-                # check if the window faces south
-                if self.direction == 's':
-                    direct_sunlight_region.append((self.x, self.y + self.length))
-                    direct_sunlight_region.append((self.x + self.width, self.y + self.length))
-                else:
-                    direct_sunlight_region = []
-            else:
-                # calculate the intersection points between the sun's ray and the top and bottom edges of the window
-                m = math.tan(self.sun_altitude)
-                c = sunlight_y - m * sunlight_x
-                intersection_y1 = m * self.x + c
-                intersection_y2 = m * (self.x + self.width) + c
-
-                # check if the intersection points are inside the window
-                if intersection_y1 > self.y and intersection_y1 < self.y + self.length:
-                    direct_sunlight_region.append((self.x, intersection_y1))
-                if intersection_y2 > self.y and intersection_y2 < self.y + self.length:
-                    direct_sunlight_region.append((self.x + self.width, intersection_y2))
-
-        return direct_sunlight_region
-    
-
-x = 25
-y = 0
+x = 30
+y = 100
 width = 25
-height = 10
-elevation = 5
-intensity = 100
+length = 20
+height = 5
 room_width = 100
 room_length = 100
+# time = 12
 for time in range(24):
-    window = Window(x, y, width, height, elevation, intensity, room_width, room_length, time)
+    window = Window(x, y, width, length, height, room_width, room_length, time)
     # window.calculate_direct_sunlight_region()
-    print(window.calculate_direct_sunlight_region())
+    # print(window.calculate_direct_sunlight_region())
+    # window.get_lit_coordinates()
+    print(window.get_lit_coordinates())
     
 # # create a window
 # window = Window(x=0, y=0, width=2, height=2, elevation=0, intensity=1, room_width=10, room_length=10, time=21)
