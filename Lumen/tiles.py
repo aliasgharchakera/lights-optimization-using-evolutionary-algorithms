@@ -1,5 +1,6 @@
 WIDTH = 50
 LENGTH = 50 #inches
+MINIMUM_INTENSITY = 0.5
 
 class Tile:
     def __init__(self, x, y, obstacle, height):
@@ -12,6 +13,7 @@ class Tile:
         # height is 0 for flat and >0 for raised
         self.lit = False
         self.fill_vessel = [0]*8
+        self.intensity = 0
          # list of 8 zeros, one for each direction
         # for direction see the diagram on group
 
@@ -34,6 +36,13 @@ class Tile:
 
     def give_status(self):
         return self.lit
+    
+    def less_intense_lit(self,intensity):
+        if self.lit!=True:
+            self.intensity = self.intensity + intensity
+        if self.intensity >= MINIMUM_INTENSITY:
+            self.lit = True
+
     
 
 

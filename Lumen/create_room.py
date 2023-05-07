@@ -9,7 +9,7 @@ Y = 10
 STANDARD_INTENSITY = 100
 STANDARD_BEAM_ANGLE = 45
 
-MINIMUM_INTENSITY = 0.5
+
 MINIMUM_FILL = 0.6
 
 class Room:
@@ -107,6 +107,7 @@ class Room:
                         else:
                             fill = (temp_radius - distance)/(self.width/X)
                             self.fill_less_than_one(k,j,pos_x,pos_y,fill)
+                            self.neighbourhood_lights(k,j,0.5)
          
         pass
     # internal functions
@@ -219,6 +220,17 @@ class Room:
                     else:
                         shadow_list[(i,j)].append([self.shadow_region(i,j,x_light,y_light,radius),self.tiles[i][j].obstacle])
         return shadow_list
+    
+    def neighbourhood_lights(self,x,y, intensity):
+        if intensity < 0.2:
+            return
+        else:
+            self.lights[x][y].light()
+            self.neighbourhood_lights(x+1,y,intensity-0.2)
+            self.neighbourhood_lights(x-1,y,intensity-0.2)
+            self.neighbourhood_lights(x,y+1,intensity-0.2)
+            self.neighbourhood_lights(x,y-1,intensity-0.2)
+
     
     
              
