@@ -24,7 +24,7 @@ class Room:
         self.windows = []
 
         for i in range(len(window_list)):
-            self.windows.append(Window(window_list[i][0], window_list[i][1], window_list[i][2], window_list[i][3], height, width, length, time))
+            self.windows.append(Window(window_list[i][0], window_list[i][1], window_list[i][2], window_list[i][3], window_list[i][4], width, length, time))
             
         for i in range(X):
             temp = []
@@ -173,7 +173,7 @@ class Room:
             shadow_tiles = []
         #     '''obstacle is 0 for north wall, 1 for east wall, 2 for south wall, 3 for west wall
         # height is 0 for flat and >0 for raised'''
-            start_x, end_x, start_y, end_y, direction = self.windows[i].calulate_direct_sunlight()
+            start_x, end_x, start_y, end_y, direction = self.windows[i].calculate_direct_sunlight()
             for j in range(start_x, end_x):
                 for k in range(start_y, end_y):
                     if self.tiles[j][k].height>0:
@@ -196,6 +196,14 @@ class Room:
                 for k in range(start_y, end_y):
                     if (j,k) not in shadow_tiles:
                         self.tiles[j][k].light_up()
+            if (start_x, start_y) not in shadow_tiles:
+                self.neighbourhood_lights(start_x,start_y, 0.5)
+            if (end_x, end_y) not in shadow_tiles:
+                self.neighbourhood_lights(end_x,end_y, 0.5)
+            if (start_x, end_y) not in shadow_tiles:
+                self.neighbourhood_lights(start_x,end_y, 0.5)
+            if (end_x, start_y) not in shadow_tiles:
+                self.neighbourhood_lights(end_x,start_y, 0.5)
 
 
         
@@ -360,7 +368,8 @@ class Room:
 
     
 
-        
-# room = Room(100, 100, 10)
-# print(room.tiles)
+if __name__ == "__main__":
+    room = Room(100,100,50,[(0,0,2,45),(5,5,2,42),(1,9,2,10),(3,9,1,4)],16, [(0, 3, 15, 15, 8)])
+    room.light_tiles()
+    print(room.num_lit_tiles())
         

@@ -190,7 +190,7 @@ class Window:
         
     #     print(irradiance_in_lumens)
 
-def __main__():
+if __name__ == "__main__":
     x = 0
     y = 2
     width = 3
@@ -204,8 +204,8 @@ def __main__():
         # window.calculate_direct_sunlight_region()
         # print(window.calculate_direct_sunlight_region())
         # window.get_lit_coordinates()
-        # print(window.get_lit_coordinates())
-        window.calculate_lumens()
+        print(window.get_lit_coordinates())
+        # window.calculate_lumens()
     
 # # create a window
 # window = Window(x=0, y=0, width=2, height=2, elevation=0, intensity=1, room_width=10, room_length=10, time=21)

@@ -297,7 +297,7 @@ class GA:
         # Return the list of best fitness values for each generation
         return fitness_lst, fit_pouplation,fit_tiles
 
-def __main__():
+if __name__ == "__main__":
     opt = GA(
         problem=Light,
         X = 10,
