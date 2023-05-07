@@ -15,18 +15,17 @@ MINIMUM_FILL = 0.6
 class Room:
 
     # externally called functions
-    def __init__(self, width, height, length, obstacles, time):
+    def __init__(self, width, height, length, obstacles, time,window_list):
         self.width = width
         self.height = height
         self.length = length
         self.tiles = []
-        if random.random() > 0.5:
-            x = random.choice([0, X-1])
-            y = random.randint(2, Y-3)
-        else:
-            x = random.randint(2, X-3)
-            y = random.choice([0, Y-1])
-        self.window = Window(x, y, self.width//3, self.height//3, 2, 100, X, Y, time)
+        # windows will take x, y,width, length, height
+        self.windows = []
+
+        for i in range(len(window_list)):
+            self.windows.append(Window(window_list[i][0], window_list[i][1], window_list[i][2], window_list[i][3], height, width, length, time))
+            
         for i in range(X):
             temp = []
             for j in range(Y):
@@ -44,11 +43,6 @@ class Room:
         # print(self.lights)
         # print(self.tiles)
         
-    def get_window_direct_light(self):
-        return self.window.get_lit_coordinates()
-        
-    def get_window_shadow(self):
-        self.window.sun_altitude
 
     def num_lit_tiles(self):
         # returns the number of tiles that are lit
@@ -171,6 +165,20 @@ class Room:
         for i in range(X):
             for j in range(Y):
                 self.lights[i][j].unlight()
+
+    def light_up_with_windows(self):
+        '''lights up the tiles with windows'''
+        for i in range(len(self.windows)):
+            start_x, end_x, start_y, end_y, direction = self.windows[i].calulate_direct_sunlight()
+            # for j in range(start_x, end_x):
+            #     for k in range(start_y, end_y):
+            #         if self.tiles[j][k].height>0:
+            #             pass
+            for j in range(start_x, end_x):
+                for k in range(start_y, end_y):
+                    self.tiles[j][k].light_up()
+
+
         
     
     def get_light_functions(self):
