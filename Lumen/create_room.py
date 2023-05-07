@@ -74,34 +74,14 @@ class Room:
             # calculate tiles in shadow from any obstacle
             # angle_of_light_on_obstacle = 
             
-            # shadows 
-            shadows = []
-            shadows_cordinates = []
-            for k in range(n_of_tiles_h_w-1):
-                for j in range(n_of_tiles_h_l-1):
-                    try:
-                        if self.tiles[pos_x+k][pos_y+j].obstacle==None or self.tiles[pos_x+k][pos_y+j].height == 0:
-                            pass
-                        else:
-                            pass
-                    except:
-                        print("error")
-                        print(pos_x+k,pos_y+j)
-                        print(X,Y)
-
-                    if self.tiles[pos_x+k][pos_y+j].obstacle == None or self.tiles[pos_x+k][pos_y+j].height == 0:
-                        continue
-                    else:
-                        temp = self.shadow_region(k, j, pos_x, pos_y, temp_radius)
-                        if temp > 0:
-                            shadows.append([temp,temp/(self.width/X),temp/(self.length/Y),self.tiles[pos_x+k][pos_y+j].obstacle])
-                            # shadow length, shadow length on width tiles, shadow length on length tiles, obstacle
-                            shadows_cordinates.append([k,j])
 
             min_x = max(0, pos_x - n_of_tiles_h_w)
             max_x = min(X - 1, pos_x + n_of_tiles_h_w)
             min_y = max(0, pos_y - n_of_tiles_h_l)
             max_y = min(Y - 1, pos_y + n_of_tiles_h_l)
+
+            shadows = {}
+            shadows = self.shadow_region_list(min_x, max_x, min_y, max_y, pos_x, pos_y, temp_radius)
 
             # Iterate over the search area and count the squares that are inside the circle
             for k in range(min_x, max_x + 1):
@@ -117,35 +97,39 @@ class Room:
                             self.tiles[k][j].light_up()
                         else:
                             fill = (temp_radius - distance)/(self.width/X)
-                            if fill>=MINIMUM_FILL:
-                                self.tiles[k][j].light_up()
-                            elif j < pos_y and k == pos_x:
-                                # this means it is right above the light
-                                self.tiles[k][j].fill(5,fill)
-                            elif j > pos_y and k == pos_x:
-                                # right below
-                                self.tiles[k][j].fill(1,fill)
-                            elif j == pos_y and k < pos_x:
-                                # on the right
-                                self.tiles[k][j].fill(3,fill)
-                            elif j == pos_y and k > pos_x:
-                                # on the left
-                                self.tiles[k][j].fill(7,fill)
-                            elif j < pos_y and k < pos_x:
-                                # top right
-                                self.tiles[k][j].fill(4,fill)
-                            elif j < pos_y and k > pos_x:
-                                # top left
-                                self.tiles[k][j].fill(6,fill)
-                            elif j > pos_y and k < pos_x:
-                                # bottom right
-                                self.tiles[k][j].fill(2,fill)
-                            elif j > pos_y and k > pos_x:
-                                # bottom left
-                                self.tiles[k][j].fill(0,fill)
+                            self.fill_less_than_one(k,j,pos_x,pos_y,fill)
          
         pass
     # internal functions
+    def fill_less_than_one(self, k, j,pos_x,pos_y, fill):
+        '''fills the tile at (x,y) with fill'''
+        # self.tiles[x][y].fill(fill)
+        if fill>=MINIMUM_FILL:
+            self.tiles[k][j].light_up()
+        elif j < pos_y and k == pos_x:
+            # this means it is right above the light
+            self.tiles[k][j].fill(5,fill)
+        elif j > pos_y and k == pos_x:
+            # right below
+            self.tiles[k][j].fill(1,fill)
+        elif j == pos_y and k < pos_x:
+            # on the right
+            self.tiles[k][j].fill(3,fill)
+        elif j == pos_y and k > pos_x:
+            # on the left
+            self.tiles[k][j].fill(7,fill)
+        elif j < pos_y and k < pos_x:
+            # top right
+            self.tiles[k][j].fill(4,fill)
+        elif j < pos_y and k > pos_x:
+            # top left
+            self.tiles[k][j].fill(6,fill)
+        elif j > pos_y and k < pos_x:
+            # bottom right
+            self.tiles[k][j].fill(2,fill)
+        elif j > pos_y and k > pos_x:
+            # bottom left
+            self.tiles[k][j].fill(0,fill)
     def add_obstacle(self, x, y, obstacle, height):
         '''obstacle is 0 for north wall, 1 for east wall, 2 for south wall, 3 for west wall
         height is 0 for flat and >0 for raised'''
@@ -213,6 +197,19 @@ class Room:
             shadow_length = base2 - (y_light*(self.length/Y))
 
         return shadow_length
+    
+    def shadow_region_list(self, min_x,max_x,min_y,max_y,x_light,y_light,radius):
+        shadow_list = {}
+        for i in range(min_x,max_x+1):
+            for j in range(min_y,max_y+1):
+                if self.tiles[i][j].obstacle == None or self.tiles[i][j].height == 0:
+                        continue
+                else:
+                    if [i,j] not in shadow_list:
+                        shadow_list[(i,j)] = [[self.shadow_region(i,j,x_light,y_light,radius),self.tiles[i][j].obstacle]]
+                    else:
+                        shadow_list[(i,j)].append([self.shadow_region(i,j,x_light,y_light,radius),self.tiles[i][j].obstacle])
+        return shadow_list
     
              
 
