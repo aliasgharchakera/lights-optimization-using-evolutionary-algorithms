@@ -1,5 +1,7 @@
 import Lumen.tiles as tiles
 import Lumen.lights as lights
+from Lumen.window import Window
+import random
 import math
 
 X = 10 # boxes it will be divided in
@@ -13,11 +15,18 @@ MINIMUM_FILL = 0.6
 class Room:
 
     # externally called functions
-    def __init__(self, width, height, length, obstacles):
+    def __init__(self, width, height, length, obstacles, time):
         self.width = width
         self.height = height
         self.length = length
         self.tiles = []
+        if random.random() > 0.5:
+            x = random.choice([0, X-1])
+            y = random.randint(2, Y-3)
+        else:
+            x = random.randint(2, X-3)
+            y = random.choice([0, Y-1])
+        self.window = Window(x, y, self.width//3, self.height//3, 2, 100, self.width, self.length, time)
         for i in range(X):
             temp = []
             for j in range(Y):
@@ -213,6 +222,7 @@ class Room:
             shadow_length = base2 - (y_light*(self.length/Y))
 
         return shadow_length
+    
     
              
 

@@ -170,17 +170,19 @@ class Optimization:
         plt.savefig("Analysis/" + filename + ".png")
         plt.close()
 
-opt = Optimization(
-    problem=Light,
-    X = 10,
-    Y = 10,
-    H = 10,
-    room = Room(10,10,10,[(0,0,0,0)]),
-    population_size=30,
-    number_of_offsprings=10,
-    number_of_generations=100,
-    mutation_rate=0.50,
-    number_of_iterations=10,
-    selection_case=(0, 0))
+for i in range(24):
+    opt = Optimization(
+        problem=Light,
+        X = 10,
+        Y = 10,
+        H = 10,
+        room = Room(10,10,10,[(0,0,0,0)],i),
+        population_size=30,
+        number_of_offsprings=10,
+        number_of_generations=100,
+        mutation_rate=0.50,
+        number_of_iterations=10,
+        selection_case=(0, 0)
+        )
 
-print(opt.evolve())
+    print(opt.evolve())
