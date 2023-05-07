@@ -26,7 +26,7 @@ class Room:
         else:
             x = random.randint(2, X-3)
             y = random.choice([0, Y-1])
-        self.window = Window(x, y, self.width//3, self.height//3, 2, 100, X, Y, time)
+        # self.window = Window(x, y, self.width//3, self.height//3, 2, 100, X, Y, time)
         for i in range(X):
             temp = []
             for j in range(Y):

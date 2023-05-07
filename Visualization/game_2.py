@@ -4,7 +4,17 @@ from OpenGL.GL import *
 from OpenGL.GLU import *
 import time
 
+import os
+import sys
 
+# add the parent directory of the current directory to the Python path
+current_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.dirname(current_dir)
+sys.path.append(parent_dir)
+
+from EA.Genetic_Algorithm import GA
+from EA.Light import Light
+from Lumen.create_room import Room
 # Initialize Pygame
 pygame.init()
 
@@ -113,3 +123,32 @@ def main_game_loop(floor_list):
         if count < count_max:
             count += 1
 # main_game_loop()
+opt = GA(
+    problem=Light,
+    X = 10,
+    Y = 10,
+    H = 50,
+    room = Room(100,100,50,[(0,0,2,45),(5,5,2,42),(1,9,2,10),(3,9,1,4)],2),
+    population_size=30,
+    number_of_offsprings=10,
+    number_of_generations=100,
+    mutation_rate=0.50
+    )
+
+population = (opt.initial_population())
+# for chromosone in population:
+#     print (chromosone)
+# print()
+# print(opt.get_best_individual(population))
+# print(opt.get_best_fitness(population))
+fitness, population, tiles= (opt.run())
+main_game_loop(tiles)
+
+# print(len(fitness),len(population), len(tiles))
+# print(fitness, "\n",population,"\n", tiles)
+# for each in fitness:
+#     print (each)
+
+# for each in population:
+#     print (each)
+#     print()

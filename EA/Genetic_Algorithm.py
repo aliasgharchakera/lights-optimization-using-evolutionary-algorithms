@@ -93,12 +93,12 @@ class GA:
         # Calculate the fitness of each chromosome in the population
         fitness_values = []
         for chromosome in population:
-            fitness = self.fitness_function(self.room, chromosome)
+            fitness, tiles = self.fitness_function(self.room, chromosome)
             fitness_values.append(fitness)
         
         # Find the index of the chromosome with the highest fitness value
         best_fitness_index = fitness_values.index(max(fitness_values))
-        # best_fitness_index = fitness_values.index(max(fitness_values[0]))
+
         # print(best_fitness_index)
         # Return the chromosome with the highest fitness value
         return population[best_fitness_index]
@@ -120,8 +120,7 @@ class GA:
             # print(best_chromosome)
             # Calculate the fitness of the best chromosome
             return self.fitness_function(self.room,best_chromosome)
-            return self.fitness_function(self.room,best_chromosome[0])
-
+            
 
     # ----------------------------------------- SELECTION SCHEMES ------------------------------------------- #
     
@@ -279,47 +278,50 @@ class GA:
         
         fit_pouplation = []
 
+        fit_tiles = []
         # Iterate over the specified number of generations
         for _ in range(self.number_of_generations):
             
             # Get the next generation by selecting and breeding the parents from the current population
-            population, best_fitness = self.step(population)
+            population, obj = self.step(population)
+            
+            best_fitness, tiles = obj
             # Append the best fitness value of the current generation to the list
             fitness_lst.append(best_fitness)
 
             # Appenf the best population of current generation to the list 
             fit_pouplation.append(population)
 
-
+            fit_tiles.append(tiles)
         
         # Return the list of best fitness values for each generation
-        return fitness_lst, fit_pouplation
+        return fitness_lst, fit_pouplation,fit_tiles
 
 
-opt = GA(
-    problem=Light,
-    X = 10,
-    Y = 10,
-    H = 50,
-    room = Room(100,100,50,[(0,0,2,45),(5,5,2,42),(1,9,2,10),(3,9,1,4)],2),
-    population_size=30,
-    number_of_offsprings=10,
-    number_of_generations=100,
-    mutation_rate=0.50
-    )
+# opt = GA(
+#     problem=Light,
+#     X = 10,
+#     Y = 10,
+#     H = 50,
+#     room = Room(100,100,50,[(0,0,2,45),(5,5,2,42),(1,9,2,10),(3,9,1,4)],2),
+#     population_size=30,
+#     number_of_offsprings=10,
+#     number_of_generations=100,
+#     mutation_rate=0.50
+#     )
 
-population = (opt.initial_population())
-# for chromosone in population:
-#     print (chromosone)
-# print()
-# print(opt.get_best_individual(population))
-# print(opt.get_best_fitness(population))
-fitness, population = (opt.run())
-print(len(fitness),len(population))
-print(fitness, "\n",population)
-# for each in fitness:
-#     print (each)
+# population = (opt.initial_population())
+# # for chromosone in population:
+# #     print (chromosone)
+# # print()
+# # print(opt.get_best_individual(population))
+# # print(opt.get_best_fitness(population))
+# fitness, population, tiles= (opt.run())
+# print(len(fitness),len(population), len(tiles))
+# print(fitness, "\n",population,"\n", tiles)
+# # for each in fitness:
+# #     print (each)
 
-# for each in population:
-#     print (each)
-#     print()
+# # for each in population:
+# #     print (each)
+# #     print()

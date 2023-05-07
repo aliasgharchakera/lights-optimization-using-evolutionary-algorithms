@@ -47,11 +47,14 @@ class SelectionSchemes:
         # Calculate the fitness of each chromosome in the population
         fitness_values = []
         for chromosome in population:
-            fitness = self.fitness_function(self.room, chromosome)
+            fitness, tiles = self.fitness_function(self.room, chromosome)
             fitness_values.append(fitness)
+
         sorted_population = sorted(population, key=lambda x: fitness_values[population.index(x)])
+        
         # sorted_population = sorted(population, key=fitness_values)    
         # sorted_population = sorted(population, key=lambda x: self.fitness_function(self.room, self.chromosone))
+        
         new_population = list(
             map(
                 lambda _: sorted_population[random.randint(
@@ -82,11 +85,12 @@ class SelectionSchemes:
         # Calculate the fitness of each chromosome in the population
         fitness_lst = []
         for chromosome in population:
-            fitness = self.fitness_function(self.room, chromosome)
+            fitness, tiles = self.fitness_function(self.room, chromosome)
             fitness_lst.append(fitness)
 
         # fitness_lst = list(map(lambda x: self.fitness_function(self.room, self.chromosone), population))
         # fitness_lst = list(map(self.fitness_function, population))
+
         total_fitness = sum(fitness_lst)
         probabilities = list(map(lambda x: x / total_fitness, fitness_lst))
         return random.choices(population, probabilities, k=self.population_size)
@@ -108,13 +112,14 @@ class SelectionSchemes:
         # Calculate the fitness of each chromosome in the population
         fitness_lst = []
         for chromosome in population:
-            fitness = self.fitness_function(self.room, chromosome)
+            fitness,tiles = self.fitness_function(self.room, chromosome)
             fitness_lst.append(fitness)
 
         new_population = []
         for _ in range(self.population_size):
             tournament = random.sample(population, 2)
             winner = max(tournament, key=lambda x: fitness_lst[population.index(x)])
+
             # winner = max(tournament, key=lambda x: self.fitness_function(self.room, self.chromosone))
             # winner = max(tournament, key=self.fitness_function)
             new_population.append(winner)
@@ -139,12 +144,12 @@ class SelectionSchemes:
         # Calculate the fitness of each chromosome in the population
         fitness_lst = []
         for chromosome in population:
-            fitness = self.fitness_function(self.room, chromosome)
+            fitness, tiles = self.fitness_function(self.room, chromosome)
             fitness_lst.append(fitness)
 
         N = len(population)
         sorted_population = sorted(population, key=lambda chromosome: fitness_lst[population.index(chromosome)])
-
+        
         # sorted_population = sorted(population, key=self.fitness_function)
         # sorted_population = sorted(population, key=lambda chromosome: self.fitness_function(self.room, chromosome))
 
