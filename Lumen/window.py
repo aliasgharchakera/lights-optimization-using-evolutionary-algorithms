@@ -2,6 +2,8 @@ import ephem
 import math
 import pytz
 from datetime import datetime
+import pvlib
+import pandas as pd
 
 LATITUDE = '24.8607'  # latitude of Karachi
 LONGITUDE = '67.0011'  # longitude of Karachi
@@ -40,6 +42,7 @@ class Window:
         local_time = datetime(2023, 5, 7, time)
         utc_time = tz.localize(local_time).astimezone(pytz.utc)
         o.date = ephem.Date(utc_time) 
+        self.date = o.date
         
         o.lat = LATITUDE 
         o.long = LONGITUDE
@@ -49,11 +52,22 @@ class Window:
         sun.compute(o)
         self.sun_altitude = math.degrees(sun.alt) # altitude of the sun in degrees
         self.sun_azimuth = math.degrees(sun.az)  # azimuth of the sun in degrees
-        print('time: ', time,'sun_altitude: ', self.sun_altitude, 'sun_azimuth: ', self.sun_azimuth)
+        # print('time: ', time,'sun_altitude: ', self.sun_altitude, 'sun_azimuth: ', self.sun_azimuth)
 
 
     def calculate_surface_area(self):
-        pass
+        distance_from_window = self.length/2 + self.height
+        horizontal_distance = distance_from_window * math.cos(math.radians(self.sun_altitude))
+        vertical_distance = distance_from_window * math.sin(math.radians(self.sun_altitude))
+        x_offset = horizontal_distance * math.cos(math.radians(self.sun_azimuth))
+        y_offset = horizontal_distance * math.sin(math.radians(self.sun_azimuth))
+        z_offset = vertical_distance
+        
+        theta = math.atan2(y_offset, x_offset)
+        phi = math.atan2(math.sqrt(x_offset**2 + y_offset**2), z_offset)
+        
+        area = self.width * self.length * math.cos(math.radians(self.sun_altitude)) * math.cos(phi) / (math.cos(theta) * self.height**2)
+        print('Area: ', area)
         
     def get_lit_coordinates(self):
         width_of_tile = self.room_width/X
@@ -147,6 +161,34 @@ class Window:
 
 
 
+    def calculate_lumens(self):
+        # Define the location and time of interest
+        timezone = 'Asia/Karachi'
+        
+        date = pd.date_range(start=f'2023-05-08 {self.time}:00:00', periods=1, freq='H', tz=timezone)
+
+        # Calculate the solar position
+        solpos = pvlib.solarposition.get_solarposition(date, float(LATITUDE), float(LONGITUDE))
+
+        # Calculate the extraterrestrial radiation
+        dni_extra = pvlib.irradiance.get_extra_radiation(date)
+
+        # Calculate the atmospheric conditions
+        pressure = pvlib.atmosphere.alt2pres(self.sun_altitude)
+        airmass = pvlib.atmosphere.get_relative_airmass(solpos['apparent_zenith'])
+
+        # Calculate the total irradiance on a surface tilted at 30 degrees facing south
+        surface_tilt = 0
+        surface_azimuth = 180
+        total_irradiance = pvlib.irradiance.get_total_irradiance(surface_tilt, self.sun_azimuth,
+                                                                solpos['apparent_zenith'], solpos['azimuth'],
+                                                                dni_extra, airmass, pressure)
+
+        # Calculate the irradiance in lumens assuming a spectral power distribution of 550 nm
+        irradiance_in_lumens = 683 * total_irradiance['poa_global'] * 550 * 10**-9
+        
+        print(irradiance_in_lumens)
+
 
 x = 0
 y = 2
@@ -161,7 +203,8 @@ for time in range(24):
     # window.calculate_direct_sunlight_region()
     # print(window.calculate_direct_sunlight_region())
     # window.get_lit_coordinates()
-    print(window.get_lit_coordinates())
+    # print(window.get_lit_coordinates())
+    window.calculate_lumens()
     
 # # create a window
 # window = Window(x=0, y=0, width=2, height=2, elevation=0, intensity=1, room_width=10, room_length=10, time=21)

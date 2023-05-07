@@ -99,6 +99,7 @@ class Light(Problem):
 
         Room.light_tiles()
         num_lit_tiles = Room.num_lit_tiles()
+        # print(num_lit_tiles)
 
         # Calculate the number of lights in the chromosome
         num_lights = len(light_positions)
@@ -106,7 +107,10 @@ class Light(Problem):
         # Calculate the fitness as a weighted sum of the two objectives
         # We want to maximize the number of lit tiles and minimize the number of lights in the chromosome
         fitness = w * num_lit_tiles - (1 - w) * num_lights
-
+        print("num lit tiles : ",num_lit_tiles," len of chromosone : ", len(light_positions), " fitness: ", fitness)
+        
+        # Tiles = []
+        # Tiles.append(Room.tiles)
         # Reset the room
         Room.reset_lights()
         Room.reset_tiles()
