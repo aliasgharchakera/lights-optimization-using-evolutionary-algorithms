@@ -9,7 +9,7 @@ Y = 10
 STANDARD_INTENSITY = 100
 STANDARD_BEAM_ANGLE = 45
 
-MINIMUM_INTENSITY = 0.5
+
 MINIMUM_FILL = 0.6
 
 class Room:
@@ -107,6 +107,7 @@ class Room:
                         else:
                             fill = (temp_radius - distance)/(self.width/X)
                             self.fill_less_than_one(k,j,pos_x,pos_y,fill)
+                            self.neighbourhood_lights(k,j,0.5)
          
         pass
     # internal functions
@@ -176,8 +177,10 @@ class Room:
         # returns dimensions of the shadow region
         shadow_length = 0
         direction = self.tiles[x_tile][y_tile].obstacle
+        direction_of_shadow = 0 # 0 for north, 1 for east, 2 for south, 3 for west
         if (direction == 0 or direction == 2) and y_light<=y_tile and x_light == x_tile:
             # north wall the light is above the tile
+            direction_of_shadow = 0
             base = self.height - self.tiles[x_tile][y_tile].height
             perpendicular = (y_tile-y_light)*(self.length/Y)
             angle = math.tan(perpendicular/base)
@@ -185,6 +188,7 @@ class Room:
             shadow_length = base2 - (x_light*(self.width/X))
         if (direction == 0 or direction ==2) and y_light>=y_tile and x_light == x_tile:
             # north wall the light is below the tile
+            direction_of_shadow = 2
             base = self.height - self.tiles[x_tile][y_tile].height
             perpendicular = (y_light-y_tile)*(self.length/Y)
             angle = math.tan(perpendicular/base)
@@ -192,6 +196,7 @@ class Room:
             shadow_length = base2 - ((X-x_light)*(self.width/X))
         if (direction == 1 or direction==3) and x_light>=x_tile and y_light == y_tile:
             # east wall the light is right of the tile
+            direction_of_shadow = 1
             base = self.height - self.tiles[x_tile][y_tile].height
             perpendicular = (x_light-x_tile)*(self.width/X)
             angle = math.tan(perpendicular/base)
@@ -199,26 +204,71 @@ class Room:
             shadow_length = base2 - ((Y-y_light)*(self.length/Y))
         if (direction == 1 or direction == 3) and x_light<=x_tile and y_light == y_tile:
             # east wall the light is left of the tile
+            direction_of_shadow = 3
             base = self.height - self.tiles[x_tile][y_tile].height
             perpendicular = (x_tile-x_light)*(self.width/X)
             angle = math.tan(perpendicular/base)
             base2 = self.height * math.tan(angle)
             shadow_length = base2 - (y_light*(self.length/Y))
 
-        return shadow_length
+        return shadow_length, direction_of_shadow
     
     def shadow_region_list(self, min_x,max_x,min_y,max_y,x_light,y_light,radius):
-        shadow_list = {}
+        shadow_list_north = {}
+        shadow_list_south = {}
+        shadow_list_east = {}
+        shadow_list_west = {}
         for i in range(min_x,max_x+1):
             for j in range(min_y,max_y+1):
                 if self.tiles[i][j].obstacle == None or self.tiles[i][j].height == 0:
                         continue
                 else:
-                    if [i,j] not in shadow_list:
-                        shadow_list[(i,j)] = [[self.shadow_region(i,j,x_light,y_light,radius),self.tiles[i][j].obstacle]]
-                    else:
-                        shadow_list[(i,j)].append([self.shadow_region(i,j,x_light,y_light,radius),self.tiles[i][j].obstacle])
-        return shadow_list
+                    temp = self.shadow_region(i,j,x_light,y_light,radius)
+                    if temp[1] == 0:
+                        shadow_list_north[(i,j)] = temp[0]
+                        s_temp = temp[0]
+                        for k in range(1,math.ceil(s_temp/(self.length/Y))):
+                            shadow_list_north[(i,j+k)] = s_temp
+                            s_temp = s_temp - (self.length/Y)
+                            if j+k > Y:
+                                break
+                    elif temp[1] == 1:
+                        shadow_list_south[(i,j)] = temp[0]
+                        s_temp = temp[0]
+                        for k in range(1,math.ceil(s_temp/(self.length/Y))):
+                            if j-k < 0:
+                                break
+                            shadow_list_south[(i,j-k)] = s_temp
+                            s_temp = s_temp - (self.length/Y)
+                    elif temp[1] == 2:
+                        shadow_list_east[(i,j)] = temp[0]
+                        s_temp = temp[0]
+                        for k in range(1,math.ceil(s_temp/(self.width/X))):
+                            if i+k > X:
+                                break
+                            shadow_list_east[(i+k,j)] = s_temp
+                            s_temp = s_temp - (self.width/X)     
+                    elif temp[1] == 3:
+                        shadow_list_west[(i,j)] = temp[0]
+                        s_temp = temp[0]
+                        for k in range(1,math.ceil(s_temp/(self.width/X))):
+                            if i-k < 0:
+                                break
+                            shadow_list_west[(i-k,j)] = s_temp
+                            s_temp = s_temp - (self.width/X)
+        return shadow_list_north, shadow_list_east, shadow_list_south, shadow_list_west
+                    
+    
+    def neighbourhood_lights(self,x,y, intensity):
+        if intensity < 0.2:
+            return
+        else:
+            self.lights[x][y].light()
+            self.neighbourhood_lights(x+1,y,intensity-0.2)
+            self.neighbourhood_lights(x-1,y,intensity-0.2)
+            self.neighbourhood_lights(x,y+1,intensity-0.2)
+            self.neighbourhood_lights(x,y-1,intensity-0.2)
+
     
     
              
