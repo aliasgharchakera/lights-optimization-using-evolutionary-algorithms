@@ -1,6 +1,6 @@
 import Lumen.tiles as tiles
 import Lumen.lights as lights
-#from Lumen.window import Window
+from Lumen.window import Window
 import random
 import math
 
