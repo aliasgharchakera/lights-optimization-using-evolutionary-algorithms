@@ -117,11 +117,11 @@ class Light(Problem):
     # CROSSOVER COMPLETE 
     @staticmethod
     def crossover(parent1: list, parent2: list) -> list:
-        """Returns a offspring after breeding from two parents
+        """Returns a offspring after breeding from two parents(two list of possible light locations)
 
         Args:
-            parent1 (list): first parent
-            parent2 (list): second parent
+            parent1 (list): first parent(list of possible ligth positions)
+            parent2 (list): second parent(list of possible light positions)
 
         Returns:
             list: offspring after breeding from two parents

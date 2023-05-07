@@ -50,7 +50,6 @@ class GA:
         self.selection_schemes = SelectionSchemes(
             fitness_function = problem.fitness_function,
             room=self.room,
-            chromosone = self.chromosome,
             population_size = population_size
             )
         
@@ -99,7 +98,7 @@ class GA:
         
         # Find the index of the chromosome with the highest fitness value
         best_fitness_index = fitness_values.index(max(fitness_values))
-        print(best_fitness_index)
+        # print(best_fitness_index)
         # Return the chromosome with the highest fitness value
         return population[best_fitness_index]
         
@@ -117,7 +116,7 @@ class GA:
             """
             # Find the best chromosome in the population
             best_chromosome = self.get_best_individual(population)
-            print(best_chromosome)
+            # print(best_chromosome)
             # Calculate the fitness of the best chromosome
             return self.fitness_function(self.room,best_chromosome)
 
@@ -244,7 +243,6 @@ class GA:
 
         # survivor selection: select survivors from new population
         survivors = selection_methods[self.survivor_selection](new_population)
-
         return survivors
 
     # Defines a single step in the evolution to obtain the best fitness of the population.
@@ -259,6 +257,7 @@ class GA:
             tuple[list, float]: List of chromosomes after 
             selection and breeding and best fitness of the population
         """
+        # print(self.next_generation(population))
         return self.next_generation(population), self.get_best_fitness(population)
 
     # Runs the evolution, on the num of generations, and return a list of best fitness of the population.
@@ -271,20 +270,26 @@ class GA:
         # Get the initial population
         population = self.initial_population()
         # print(population)
+
+        # print(population)
         # Create a list to store the best fitness value for each generation
         fitness_lst = []
         
+        fit_pouplation = []
         # Iterate over the specified number of generations
         for _ in range(self.number_of_generations):
             
             # Get the next generation by selecting and breeding the parents from the current population
             population, best_fitness = self.step(population)
-            
             # Append the best fitness value of the current generation to the list
             fitness_lst.append(best_fitness)
+
+            # Appenf the best population of current generation to the list 
+            fit_pouplation.append(population)
+
         
         # Return the list of best fitness values for each generation
-        return fitness_lst
+        return fitness_lst, fit_pouplation
 
 
 opt = GA(
@@ -300,8 +305,17 @@ opt = GA(
     )
 
 population = (opt.initial_population())
-for chromosone in population:
-    print (chromosone)
-print()
-print(opt.get_best_individual(population))
-print(opt.get_best_fitness(population))
+# for chromosone in population:
+#     print (chromosone)
+# print()
+# print(opt.get_best_individual(population))
+# print(opt.get_best_fitness(population))
+fitness, population = (opt.run())
+print(len(fitness),len(population))
+print(fitness, "\n",population)
+# for each in fitness:
+#     print (each)
+
+for each in population:
+    print (each)
+    print()
