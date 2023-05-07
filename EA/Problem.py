@@ -10,7 +10,7 @@ class Problem(ABC):
 
     """
 
-    # inverse_fitness: bool = False # variable used in plotting BSF & ASF graph, use if needed 
+    inverse_fitness: bool = False # variable used in plotting BSF & ASF graph, use if needed 
 
     @abstractmethod
     def chromosome(self) -> list:

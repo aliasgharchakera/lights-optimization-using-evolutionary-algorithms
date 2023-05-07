@@ -298,30 +298,27 @@ class GA:
         return fitness_lst, fit_pouplation,fit_tiles
 
 
-# opt = GA(
-#     problem=Light,
-#     X = 10,
-#     Y = 10,
-#     H = 50,
-#     room = Room(100,100,50,[(0,0,2,45),(5,5,2,42),(1,9,2,10),(3,9,1,4)],2),
-#     population_size=30,
-#     number_of_offsprings=10,
-#     number_of_generations=100,
-#     mutation_rate=0.50
-#     )
+opt = GA(
+    problem=Light,
+    X = 10,
+    Y = 10,
+    H = 50,
+    room = Room(100,100,50,[(0,0,2,45),(5,5,2,42),(1,9,2,10),(3,9,1,4)],2),
+    parent_selection = 1,
+    survivor_selection = 1,
+    population_size=30,
+    number_of_offsprings=10,
+    number_of_generations=100,
+    mutation_rate=0.50
+    )
 
-# population = (opt.initial_population())
-# # for chromosone in population:
-# #     print (chromosone)
-# # print()
-# # print(opt.get_best_individual(population))
-# # print(opt.get_best_fitness(population))
-# fitness, population, tiles= (opt.run())
-# print(len(fitness),len(population), len(tiles))
-# print(fitness, "\n",population,"\n", tiles)
-# # for each in fitness:
-# #     print (each)
+population = (opt.initial_population())
 
-# # for each in population:
-# #     print (each)
-# #     print()
+fitness, population, tiles= (opt.run())
+print(fitness, "\n",population,"\n", tiles)
+# for each in fitness:
+#     print (each)
+
+# for each in population:
+#     print (each)
+#     print()

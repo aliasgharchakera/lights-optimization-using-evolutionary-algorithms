@@ -110,56 +110,6 @@ class Window:
                 if angle < self.sun_altitude:
                     lit_coordinates.append((x,y))
         return lit_coordinates
-    
-    def get_length_shadow(self):
-        # we are assuming that the sun at all times is right in front of the window 
-        # for a more accurate result you may use a more accurate description of sunlight 
-        start_length_sun = self.height * math.tan(math.radians(self.sun_altitude))
-        stop_length_sun = (self.height + self.length) * math.tan(math.radians(self.sun_altitude))
-        # 0 -> the starting of the direct sunlight 
-        # 1 -> the end of the direct sunlight
-        return start_length_sun, stop_length_sun
-    
-    def get_width_shadow(self):
-        return self.width
-    
-    def calculate_direct_sunlight(self):
-        starting_sun_light, ending_sun_light = self.get_length_shadow()
-        width_of_tile = self.room_width/X
-        length_of_tile = self.room_length/Y
-
-        start_x = 0
-        end_x = 0
-        start_y = 0
-        end_y = 0
-
-        # calculate the starting and ending coordinates of the lit region
-        if self.direction == 'w':
-            start_x = self.x
-            end_x = min(X, self.x + math.ceil(self.width/width_of_tile))
-            start_y = min(Y,0 + math.ceil(starting_sun_light/length_of_tile))
-            end_y = min(Y,math.ceil(starting_sun_light/length_of_tile) + math.ceil(ending_sun_light/length_of_tile))
-        elif self.direction == 'e':
-            start_x = self.x
-            end_x = min(X, self.x + math.ceil(self.width/width_of_tile))
-            start_y = max(0,Y - math.ceil(starting_sun_light/length_of_tile))
-            end_y = max(0, Y - math.ceil(starting_sun_light/length_of_tile)  - math.ceil(ending_sun_light/length_of_tile))
-        elif self.direction == 'n':
-            start_x = min(X, 0 + math.ceil(starting_sun_light/width_of_tile))
-            end_x = min(X, math.ceil(starting_sun_light/width_of_tile) + math.ceil(ending_sun_light/width_of_tile))
-            start_y = self.y
-            end_y = min(Y, self.y + math.ceil(self.length/length_of_tile))
-        elif self.direction == 's':
-            start_x = max(0, X - math.ceil(starting_sun_light/width_of_tile))
-            end_x = max(0, X - math.ceil(starting_sun_light/width_of_tile) - math.ceil(ending_sun_light/width_of_tile))
-            start_y = self.y
-            end_y = self.y + math.ceil(self.length/length_of_tile)
-
-        return start_x, end_x, start_y, end_y, self.direction
-
-        
-
-
 
     def calculate_lumens(self):
         # Define the location and time of interest
