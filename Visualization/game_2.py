@@ -54,12 +54,6 @@ unlit_color = (0.2, 0.2, 0.2)
 def partial_color(color, intensity):
     return (color[0] * intensity, color[1] * intensity, color[2] * intensity)
 partial_lit = partial_color(lit_color, 0.5)
-# # Define the nested list that represents the floor
-# floor = [[(0.647, 0.165, 0.165) for j in range(FLOOR_HEIGHT)] for i in range(FLOOR_WIDTH)]
-# floor[2][3] = (1, 1, 1)  # Set a tile to be lit
-# floor[4][7] = (0.4, 0.4, 0.4)  # Set a tile to be less intensely lit
-# floor[6][2] = (0.8, 0.8, 0.8)  # Set a tile to be partially lit
-# floor[8][5] = (0.2, 0.2, 0.2)  # Set a tile to be unlit
 
 # Define a function to draw a tile
 def draw_tile(tile_x, tile_y, color):
@@ -121,21 +115,21 @@ def draw_floor(floor):
             
             # color = floor[i][j]
             draw_tile(tile_x, tile_y, color)
-
-# Main game loop
-def main_game_loop(floor_list, lens_of_chromosomes):
+    
+def main_game_loop(floor_list, lens_of_chromosomes,count):
     count_max = len(floor_list)-1
-    count = 0
+    running = False 
     while True:
         # Update the floor
         floor = floor_list[count]
-        print(count)
-
+        print(floor)
         # Handle events
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
+                draw_floor(floor)
+        runnning =  True
 
         # Clear the screen and depth buffer
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
@@ -143,9 +137,10 @@ def main_game_loop(floor_list, lens_of_chromosomes):
         # Set up the camera
         glLoadIdentity()
         gluLookAt(0, -10, 5, 0, 0, 0, 0, 0, 1)
-
+        if runnning:
         # Draw the floor
-        draw_floor(floor)
+            draw_floor(floor)
+        pygame.display.flip()
 
         # Update the display
         time.sleep(0.1)
@@ -153,15 +148,54 @@ def main_game_loop(floor_list, lens_of_chromosomes):
 
         # Limit the framerate to 60 FPS
         clock.tick(30)
-        if count < count_max:
-            count += 1
+        
+        # Update count to draw the next floor
+        count += 1
+        if count > count_max:
+            return
+
+# # Main game loop
+# def main_game_loop(floor_list, lens_of_chromosomes):
+#     count_max = len(floor_list)-1
+#     count = 0
+#     while True:
+#         # Update the floor
+#         floor = floor_list[count]
+#         print(count)
+
+#         # Handle events
+#         for event in pygame.event.get():
+#             if event.type == pygame.QUIT:
+#                 pygame.quit()
+#                 sys.exit()
+
+#         # Clear the screen and depth buffer
+#         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+
+#         # Set up the camera
+#         glLoadIdentity()
+#         gluLookAt(0, -10, 5, 0, 0, 0, 0, 0, 1)
+
+#         # Draw the floor
+#         draw_floor(floor)
+
+#         # Update the display
+#         time.sleep(0.1)
+#         pygame.display.flip()
+
+#         # Limit the framerate to 60 FPS
+#         clock.tick(30)
+#         if count < count_max:
+#             count += 1
 # main_game_loop()
 opt = GA(
     problem=Light,
     X = 10,
     Y = 10,
     H = 50,
-    room = Room(100,100,50,[(0,0,2,45),(5,5,2,42),(1,9,2,10),(3,9,1,4)],16, [(0, 3, 15, 15, 8)]),
+    room = Room(100,100,50,[(0,0,2,45),(5,5,2,42),(1,9,2,10),(3,9,1,4)],2,[0,0,0,0]),
+    parent_selection = 3,
+    survivor_selection = 2,
     population_size=30,
     number_of_offsprings=10,
     number_of_generations=100,
@@ -169,19 +203,8 @@ opt = GA(
     )
 
 population = (opt.initial_population())
-# for chromosone in population:
-#     print (chromosone)
-# print()
-# print(opt.get_best_individual(population))
-# print(opt.get_best_fitness(population))
+
 fitness, population, tiles= (opt.run())
-main_game_loop(tiles,fitness)
-
-# print(len(fitness),len(population), len(tiles))
-# print(fitness, "\n",population,"\n", tiles)
-# for each in fitness:
-#     print (each)
-
-# for each in population:
-#     print (each)
-#     print()
+main_game_loop(tiles,fitness, count=0)
+# for each in tiles:
+#     print(each)
