@@ -270,16 +270,16 @@ class GA:
         return fitness_lst
 
 
-opt = GA(
-    problem=Light,
-    X = 10,
-    Y = 10,
-    H = 10,
-    room = Room(10,10,10,[(0,0,0,0)]),
-    population_size=30,
-    number_of_offsprings=10,
-    number_of_generations=100,
-    mutation_rate=0.50
-    )
+# opt = GA(
+#     problem=Light,
+#     X = 10,
+#     Y = 10,
+#     H = 10,
+#     room = Room(10,10,10,[(0,0,0,0)]),
+#     population_size=30,
+#     number_of_offsprings=10,
+#     number_of_generations=100,
+#     mutation_rate=0.50
+#     )
 
-print(opt.run())
+# print(opt.run())
