@@ -73,6 +73,8 @@ class Window:
         width_of_tile = self.room_width/X
         length_of_tile = self.room_length/Y
         lit_coordinates = []
+        d = 0
+        
         # calculate the starting and ending coordinates of the lit region
         if self.direction == 'w':
             start_x = 0
@@ -132,24 +134,30 @@ class Window:
         end_x = 0
         start_y = 0
         end_y = 0
+        '''obstacle is 0 for north wall, 1 for east wall, 2 for south wall, 3 for west wall
+        height is 0 for flat and >0 for raised'''
 
         # calculate the starting and ending coordinates of the lit region
         if self.direction == 'w':
+            d = 3
             start_x = self.x
             end_x = min(X, self.x + math.ceil(self.width/width_of_tile))
             start_y = min(Y,0 + math.ceil(starting_sun_light/length_of_tile))
             end_y = min(Y,math.ceil(starting_sun_light/length_of_tile) + math.ceil(ending_sun_light/length_of_tile))
         elif self.direction == 'e':
+            d = 1
             start_x = self.x
             end_x = min(X, self.x + math.ceil(self.width/width_of_tile))
             start_y = max(0,Y - math.ceil(starting_sun_light/length_of_tile))
             end_y = max(0, Y - math.ceil(starting_sun_light/length_of_tile)  - math.ceil(ending_sun_light/length_of_tile))
         elif self.direction == 'n':
+            d = 0
             start_x = min(X, 0 + math.ceil(starting_sun_light/width_of_tile))
             end_x = min(X, math.ceil(starting_sun_light/width_of_tile) + math.ceil(ending_sun_light/width_of_tile))
             start_y = self.y
             end_y = min(Y, self.y + math.ceil(self.length/length_of_tile))
         elif self.direction == 's':
+            d = 2
             start_x = max(0, X - math.ceil(starting_sun_light/width_of_tile))
             end_x = max(0, X - math.ceil(starting_sun_light/width_of_tile) - math.ceil(ending_sun_light/width_of_tile))
             start_y = self.y
