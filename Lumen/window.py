@@ -2,7 +2,7 @@ import ephem
 import math
 import pytz
 from datetime import datetime
-import pvlib
+# import pylib
 import pandas as pd
 
 LATITUDE = '24.8607'  # latitude of Karachi
@@ -111,33 +111,33 @@ class Window:
                     lit_coordinates.append((x,y))
         return lit_coordinates
 
-    def calculate_lumens(self):
-        # Define the location and time of interest
-        timezone = 'Asia/Karachi'
+    # def calculate_lumens(self):
+    #     # Define the location and time of interest
+    #     timezone = 'Asia/Karachi'
         
-        date = pd.date_range(start=f'2023-05-08 {self.time}:00:00', periods=1, freq='H', tz=timezone)
+    #     date = pd.date_range(start=f'2023-05-08 {self.time}:00:00', periods=1, freq='H', tz=timezone)
 
-        # Calculate the solar position
-        solpos = pvlib.solarposition.get_solarposition(date, float(LATITUDE), float(LONGITUDE))
+    #     # Calculate the solar position
+    #     solpos = pvlib.solarposition.get_solarposition(date, float(LATITUDE), float(LONGITUDE))
 
-        # Calculate the extraterrestrial radiation
-        dni_extra = pvlib.irradiance.get_extra_radiation(date)
+    #     # Calculate the extraterrestrial radiation
+    #     dni_extra = pvlib.irradiance.get_extra_radiation(date)
 
-        # Calculate the atmospheric conditions
-        pressure = pvlib.atmosphere.alt2pres(self.sun_altitude)
-        airmass = pvlib.atmosphere.get_relative_airmass(solpos['apparent_zenith'])
+    #     # Calculate the atmospheric conditions
+    #     pressure = pvlib.atmosphere.alt2pres(self.sun_altitude)
+    #     airmass = pvlib.atmosphere.get_relative_airmass(solpos['apparent_zenith'])
 
-        # Calculate the total irradiance on a surface tilted at 30 degrees facing south
-        surface_tilt = 0
-        surface_azimuth = 180
-        total_irradiance = pvlib.irradiance.get_total_irradiance(surface_tilt, self.sun_azimuth,
-                                                                solpos['apparent_zenith'], solpos['azimuth'],
-                                                                dni_extra, airmass, pressure)
+    #     # Calculate the total irradiance on a surface tilted at 30 degrees facing south
+    #     surface_tilt = 0
+    #     surface_azimuth = 180
+    #     total_irradiance = pvlib.irradiance.get_total_irradiance(surface_tilt, self.sun_azimuth,
+    #                                                             solpos['apparent_zenith'], solpos['azimuth'],
+    #                                                             dni_extra, airmass, pressure)
 
-        # Calculate the irradiance in lumens assuming a spectral power distribution of 550 nm
-        irradiance_in_lumens = 683 * total_irradiance['poa_global'] * 550 * 10**-9
+    #     # Calculate the irradiance in lumens assuming a spectral power distribution of 550 nm
+    #     irradiance_in_lumens = 683 * total_irradiance['poa_global'] * 550 * 10**-9
         
-        print(irradiance_in_lumens)
+    #     print(irradiance_in_lumens)
 
 
 x = 0
