@@ -77,6 +77,22 @@ class Light(Problem):
     #     return fitness
     @staticmethod
     def fitness_function(Room: Room, light_positions: list, w: float = 0.5) -> float:
+        """
+        Calculates the fitness of a chromosome based on the number of lit tiles and number of lights in the room.
+
+        Args:
+            Room (Room): The room object containing the tile grid and light positions
+            light_positions (list): The list of light positions in the chromosome
+            w (float, optional): 
+                The weight of the number of lit tiles objective in the fitness function. Defaults to 0.5.
+                If w is close to 1, then the number of lit tiles will be the dominant factor in determining fitness. 
+                If w is close to 0, then the number of lights in the chromosome will be the dominant factor. 
+                A value of w at 0.5 means both objectives have equal importance.
+
+        Returns:
+            float: The fitness value of the chromosome
+        """
+
         # Calculate the number of lit tiles
         for x,y in light_positions:
             Room.light_light(x, y)
@@ -86,9 +102,9 @@ class Light(Problem):
 
         # Calculate the number of lights in the chromosome
         num_lights = len(light_positions)
-        print("num lit tiles : ",num_lit_tiles," len of chromosone : ", len(light_positions))
 
         # Calculate the fitness as a weighted sum of the two objectives
+        # We want to maximize the number of lit tiles and minimize the number of lights in the chromosome
         fitness = w * num_lit_tiles - (1 - w) * num_lights
 
         # Reset the room
@@ -101,11 +117,11 @@ class Light(Problem):
     # CROSSOVER COMPLETE 
     @staticmethod
     def crossover(parent1: list, parent2: list) -> list:
-        """Returns a offspring after breeding from two parents
+        """Returns a offspring after breeding from two parents(two list of possible light locations)
 
         Args:
-            parent1 (list): first parent
-            parent2 (list): second parent
+            parent1 (list): first parent(list of possible ligth positions)
+            parent2 (list): second parent(list of possible light positions)
 
         Returns:
             list: offspring after breeding from two parents

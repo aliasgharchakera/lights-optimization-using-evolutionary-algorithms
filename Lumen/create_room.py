@@ -90,20 +90,31 @@ class Room:
             max_y = min(Y - 1, pos_y + n_of_tiles_h_l)
 
             shadows = {}
-            shadows = self.shadow_region_list(min_x, max_x, min_y, max_y, pos_x, pos_y, temp_radius)
+            shadows_north, shadows_south, shadows_west, shadows_east = self.shadow_region_list(min_x, max_x, min_y, max_y, pos_x, pos_y, temp_radius)
+
 
             # Iterate over the search area and count the squares that are inside the circle
             for k in range(min_x, max_x + 1):
                 for j in range(min_y, max_y + 1):
                     if self.tiles[k][j].give_status():
                         continue
+                    
+                    # check if the tile is in the shadow
+                    shadow_perm = self.shadow_permeability(shadows_north,shadows_south,shadows_east,shadows_west,k,j)
                     dx = abs((k*(self.width/X)) - temp_x)
                     dy = abs((j*(self.length/Y)) - temp_y)
                     distance = math.sqrt(dx**2 + dy**2)
 
                     if distance <= temp_radius:
-                        if temp_radius - distance >= 1:
+                        if temp_radius - distance >= 1 and shadow_perm[0]==1:
                             self.tiles[k][j].light_up()
+                        elif shadow_perm[0]<1 and temp_radius - distance >= 1:
+                            if shadow_perm[1]==2:
+                                self.tiles[k][j].fill(5,shadow_perm[0])
+                            elif shadow_perm[1]==4:
+                                self.tiles[k][j].fill(7,shadow_perm[0])
+                            else:
+                                self.tiles[k][j].fill(shadow_perm[1],shadow_perm[0])
                         else:
                             fill = (temp_radius - distance)/(self.width/X)
                             self.fill_less_than_one(k,j,pos_x,pos_y,fill)
@@ -228,16 +239,24 @@ class Room:
                         shadow_list_north[(i,j)] = temp[0]
                         s_temp = temp[0]
                         for k in range(1,math.ceil(s_temp/(self.length/Y))):
-                            shadow_list_north[(i,j+k)] = s_temp
-                            s_temp = s_temp - (self.length/Y)
                             if j+k > Y:
                                 break
+                            if (i,j+k) in shadow_list_north:
+                                if shadow_list_north[(i,j+k)] > s_temp:
+                                    s_temp = s_temp - (self.length/Y)
+                                    continue
+                            shadow_list_north[(i,j+k)] = s_temp
+                            s_temp = s_temp - (self.length/Y)
                     elif temp[1] == 1:
                         shadow_list_south[(i,j)] = temp[0]
                         s_temp = temp[0]
                         for k in range(1,math.ceil(s_temp/(self.length/Y))):
                             if j-k < 0:
                                 break
+                            if (i,j-k) in shadow_list_south:
+                                if shadow_list_south[(i,j-k)] > s_temp:
+                                    s_temp = s_temp - (self.length/Y)
+                                    continue
                             shadow_list_south[(i,j-k)] = s_temp
                             s_temp = s_temp - (self.length/Y)
                     elif temp[1] == 2:
@@ -246,6 +265,10 @@ class Room:
                         for k in range(1,math.ceil(s_temp/(self.width/X))):
                             if i+k > X:
                                 break
+                            if (i+k,j) in shadow_list_east:
+                                if shadow_list_east[(i+k,j)] > s_temp:
+                                    s_temp = s_temp - (self.width/X)
+                                    continue
                             shadow_list_east[(i+k,j)] = s_temp
                             s_temp = s_temp - (self.width/X)     
                     elif temp[1] == 3:
@@ -254,10 +277,37 @@ class Room:
                         for k in range(1,math.ceil(s_temp/(self.width/X))):
                             if i-k < 0:
                                 break
+                            if (i-k,j) in shadow_list_west:
+                                if shadow_list_west[(i-k,j)] > s_temp:
+                                    s_temp = s_temp - (self.width/X)
+                                    continue
                             shadow_list_west[(i-k,j)] = s_temp
                             s_temp = s_temp - (self.width/X)
         return shadow_list_north, shadow_list_east, shadow_list_south, shadow_list_west
-                    
+    
+    def shadow_permeability(self,s_north,s_south,s_east,s_West,x,y):
+        if (x,y) in s_north:
+            if s_north[(x,y)] > 1:
+                return (0,1)
+            else:
+                return (1-s_north[(x,y)],1)
+        elif (x,y) in s_south:
+            if s_south[(x,y)] > 1:
+                return (0,1)
+            else:
+                return (1-s_south[(x,y)],1)
+        elif (x,y) in s_east:
+            if s_east[(x,y)] > 1:
+                return (0,1)
+            else:
+                return (1-s_east[(x,y)],1)
+        elif (x,y) in s_West:
+            if s_West[(x,y)] > 1:
+                return (0,1)
+            else:
+                return (1-s_West[(x,y)],1)
+        else:
+            return (1,1)
 
     def neighbourhood_lights(self,x,y, intensity):
         if intensity < 0.2:
