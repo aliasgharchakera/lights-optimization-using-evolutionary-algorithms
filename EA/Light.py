@@ -14,6 +14,7 @@ from Lumen.create_room import Room
 class Light(Problem):
 
     # inverse_fitness = True # variable used if we are to generate grpahs S
+    
 
     # CREATE CHROMSONE REPRESENTATION !
     @staticmethod

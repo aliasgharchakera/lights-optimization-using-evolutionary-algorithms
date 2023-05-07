@@ -185,4 +185,4 @@ for i in range(24):
         selection_case=(0, 0)
         )
 
-    print(opt.evolve())
+    print(opt.evolve().run())
