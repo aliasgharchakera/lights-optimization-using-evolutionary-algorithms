@@ -258,18 +258,6 @@ class Room:
                             s_temp = s_temp - (self.width/X)
         return shadow_list_north, shadow_list_east, shadow_list_south, shadow_list_west
                     
-    # def neighbourhood_lights(self, x, y, intensity):
-    #     if intensity < 0.2:
-    #         return
-    #     try:
-    #         self.tiles[x][y].less_intense_lit(intensity)
-    #         self.neighbourhood_lights(x+1, y, intensity-0.2)
-    #         self.neighbourhood_lights(x-1, y, intensity-0.2)
-    #         self.neighbourhood_lights(x, y+1, intensity-0.2)
-    #         self.neighbourhood_lights(x, y-1, intensity-0.2)
-    #     except IndexError:
-    #         print("x: ", x,", y: ",y)
-    #         pass
 
     def neighbourhood_lights(self,x,y, intensity):
         if intensity < 0.2:
