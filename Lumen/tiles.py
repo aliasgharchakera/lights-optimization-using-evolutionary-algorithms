@@ -16,6 +16,9 @@ class Tile:
         self.intensity = 0
          # list of 8 zeros, one for each direction
         # for direction see the diagram on group
+        
+    def __str__(self) -> str:
+        return f"{self.lit}"
 
     def light_up(self):
         self.lit = True
