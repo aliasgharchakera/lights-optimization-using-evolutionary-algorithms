@@ -7,5 +7,3 @@ def draw_graph(fitness):
     plt.ylabel('Fitness')
     plt.title('Fitness over generations')
     plt.show()
-
-# draw_graph(fit)

@@ -284,13 +284,14 @@ class GA:
             
             # Get the next generation by selecting and breeding the parents from the current population
             population, obj = self.step(population)
+            best_individual = self.get_best_individual(population)
             
             best_fitness, tiles = obj
             # Append the best fitness value of the current generation to the list
             fitness_lst.append(best_fitness)
 
             # Appenf the best population of current generation to the list 
-            fit_pouplation.append(population)
+            fit_pouplation.append(best_individual)
 
             fit_tiles.append(tiles)
         
@@ -333,13 +334,25 @@ selection_methods = [
 4,4 99,13,43
 
 """
+import matplotlib.pyplot as plt
+
+# draw a graph of fitness over generations where the axis are labelled
+def draw_graph(fitness, len_population, tiles):
+    plt.plot(len_population)
+    plt.plot(tiles)
+    plt.xlabel('Generation')
+    plt.ylabel('Len of Chromosome')
+    plt.title('Len of Chromosome over generations')
+    plt.show()
+
 if __name__ == "__main__":
+    room = Room(100,100,50,[(0,0,2,45),(5,5,2,42),(1,9,2,10),(3,9,1,4)],16, [(0, 3, 15, 15, 8)])
     opt = GA(
         problem=Light,
         X = 10,
         Y = 10,
         H = 50,
-        room = Room(100,100,50,[(0,0,2,45),(5,5,2,42),(1,9,2,10),(3,9,1,4)],2,[(0,0,0,0)]),
+        room = room,
         parent_selection = 3,
         survivor_selection = 2,
         population_size=30,
@@ -349,6 +362,21 @@ if __name__ == "__main__":
         )
 
     population = (opt.initial_population())
+    fitness, population, tiles = opt.run()
+    
+    len_num_lit_tiles = []
+    
+    for p in population:
+        for x, y in p:
+            room.light_light(x, y)
+
+        room.light_tiles()
+        num_lit_tiles = room.num_lit_tiles()
+        len_num_lit_tiles.append(num_lit_tiles)
+        room.reset()
+    
+    len_population = [len(p) for p in population]
+    draw_graph(fitness, len_population, len_num_lit_tiles)
 
 # fitness, population, tiles= (opt.run())
 # print(fitness, "\n",population,"\n", tiles)

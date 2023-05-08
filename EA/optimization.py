@@ -80,22 +80,26 @@ class Optimization:
                 )
             fitness, population, tiles = ga.run()
             # sort fitness, population and tiles according to the best fitness using zip in descending order
+            # print(fitness)
             fitness, population, tiles = zip(*sorted(zip(fitness, population, tiles), reverse=True))
+            # print(fitness)
+            # return
             best_fitness.append(fitness[0])
             best_population.append(population[0])
             best_tiles.append(tiles[0])
             
         for i, p in enumerate(best_population):
-            for c in p:
-                for x, y in c:
-                    self.room.light_light(x, y)
-                self.room.light_tiles()
-            for row in best_tiles[i]:
-                for tile in row:
-                    print(tile, end = " ")
-                print()
-            print("Time: ", i*3, "Fitness: ", best_fitness[i])
-            self.room.reset()
+            print("Time: ", i*3, "Fitness: ", best_fitness[i], " Length Of Chromosone : ", len(p))
+            print(p)
+            # for x, y in p:
+            #     # for x, y in c:
+            #     self.room.light_light(x, y)
+            #     self.room.light_tiles()
+            # for row in best_tiles[i]:
+            #     for tile in row:
+            #         print(tile, end = " ")
+            #     print()
+            # self.room.reset()
         
     
 

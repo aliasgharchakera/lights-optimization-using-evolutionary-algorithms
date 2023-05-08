@@ -157,14 +157,21 @@ def draw_floor(floor):
     
 def main_game_loop(floor_list, lens_of_chromosomes):
     count = 0
-    count_max = len(floor_list)-1
+    count_max = 1
     while True:
         # Update the floor
         floor = floor_list[count]
-        print(count)
+        # print(count)
 
         # Handle events
         for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_LEFT:
+                    # Decrease the solution index
+                    count = max(count - 1, 0)
+                if event.key == pygame.K_RIGHT:
+                    # Increase the solution index
+                    count = min(count + 1, count_max)
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
@@ -184,15 +191,13 @@ def main_game_loop(floor_list, lens_of_chromosomes):
 
         # Limit the framerate to 60 FPS
         clock.tick(5)
-        if count < count_max:
-            count += 1
 # main_game_loop()
 opt = GA(
     problem=Light,
     X = 10,
     Y = 10,
     H = 50,
-    room = Room(100,100,50,[(0,0,2,45),(5,5,2,42),(1,9,2,10),(3,9,1,4)],16, [(0, 3, 15, 15, 8)]),
+    room = Room(100,100,50,[(0,0,2,45),(5,5,2,42),(1,9,2,10),(3,9,1,4)],12, [(0, 3, 15, 15, 8)]),
     parent_selection = 3,
     survivor_selection = 2,
     population_size=30,
@@ -204,4 +209,5 @@ opt = GA(
 population = (opt.initial_population())
 
 fitness, population, tiles= opt.run()
+fitness, population, tiles = zip(*sorted(zip(fitness, population, tiles), reverse=True))
 main_game_loop(tiles,fitness)
