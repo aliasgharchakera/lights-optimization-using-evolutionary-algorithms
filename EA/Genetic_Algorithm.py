@@ -295,7 +295,7 @@ class GA:
             fit_tiles.append(tiles)
         
         # Return the list of best fitness values for each generation
-        return fitness_lst, fit_pouplation,fit_tiles[-1]
+        return fitness_lst, fit_pouplation,fit_tiles
 
 """
 selection_methods = [
