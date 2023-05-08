@@ -72,36 +72,74 @@ def draw_tile(tile_x, tile_y, color):
     glEnd()
 
 # Define a function to draw the floor
+def draw_tile_walls(x, y, wall_size, side):
+    # Calculate the coordinates of the walls based on the side variable
+    wall_color = (0.647, 0.165, 0.165)
+    tile_size = TILE_SIZE
+    if side == 0:
+        north_wall = ((x, y), (x + tile_size, y))
+        west_wall = ((x, y), (x, y + tile_size))
+        east_wall = ((x + tile_size - wall_size, y), (x + tile_size - wall_size, y + tile_size))
+        south_wall = ((x, y + tile_size - wall_size), (x + tile_size, y + tile_size - wall_size))
+    elif side == 3:
+        north_wall = ((x, y), (x + tile_size, y))
+        west_wall = ((x, y + tile_size - wall_size), (x, y))
+        east_wall = ((x + tile_size - wall_size, y + tile_size), (x + tile_size - wall_size, y))
+        south_wall = ((x, y + wall_size), (x + tile_size, y + wall_size))
+    elif side == 1:
+        north_wall = ((x, y), (x + tile_size, y))
+        west_wall = ((x, y + wall_size), (x, y + tile_size))
+        east_wall = ((x + tile_size - wall_size, y + tile_size), (x + tile_size - wall_size, y))
+        south_wall = ((x, y), (x + tile_size, y))
+    elif side == 2:
+        north_wall = ((x, y + tile_size - wall_size), (x + tile_size, y + tile_size - wall_size))
+        west_wall = ((x, y), (x, y + tile_size))
+        east_wall = ((x + tile_size - wall_size, y), (x + tile_size - wall_size, y + tile_size))
+        south_wall = ((x, y), (x + tile_size, y))
+    
+    # Draw the walls
+    pygame.draw.line(screen, wall_color, *north_wall, wall_size)
+    pygame.draw.line(screen, wall_color, *west_wall, wall_size)
+    pygame.draw.line(screen, wall_color, *east_wall, wall_size)
+    pygame.draw.line(screen, wall_color, *south_wall, wall_size)
+
 def draw_obstacle (x,y,z,side):
-    # define the vertices of the cube
-    vertices = [
-    (x, y, z), # front bottom left
-    (x + TILE_SIZE, y, z), # front bottom right
-    (x + TILE_SIZE, y + TILE_SIZE, z), # front top right
-    (x, y + TILE_SIZE, z), # front top left
-    (x, y, z + TILE_SIZE), # back bottom left
-    (x + TILE_SIZE, y, z + TILE_SIZE), # back bottom right
-    (x + TILE_SIZE, y + TILE_SIZE, z + TILE_SIZE), # back top right
-    (x, y + TILE_SIZE, z + TILE_SIZE), # back top left
-    ]
-
-    # define the indices of the vertices for each face
-    indices = [
-    (0, 1, 2, 3), # front face
-    (4, 5, 6, 7), # back face
-    (0, 1, 5, 4), # bottom face
-    (2, 3, 7, 6), # top face
-    (0, 3, 7, 4), # left face
-    (1, 2, 6, 5), # right face
-    ]
-
-# draw the cube with one side missing
+    # wall_color = (0.647, 0.165, 0.165)
     glBegin(GL_QUADS)
-    for i, face in enumerate(indices):
-        if i != 4: # skip the left face
-            for vertex_index in face:
-                glVertex3fv(vertices[vertex_index])
+    WALL_COLOR = (0.647, 0.165, 0.165)
+    WALL_THICKNESS = 0.2
+    # glPushMatrix()
+    # glTranslatef(x, y, 0)
+    # glBegin(GL_QUADS)
+    # glColor3f(*wall_color)
+    # glVertex3f(0.5, 0.5, 0.5)
+    # glVertex3f(0.5, -0.5, 0.5)
+    # glVertex3f(0.5, -0.5, -0.5)
+    # glVertex3f(0.5, 0.5, -0.5)
+    # glEnd()
+    # glPopMatrix()
+    glColor3f(WALL_COLOR[0], WALL_COLOR[1], WALL_COLOR[2])
+    glVertex3f(x, y, 0)
+    glVertex3f(x + WALL_THICKNESS, y, 0)
+    glVertex3f(x + WALL_THICKNESS, y, z)
+    glVertex3f(x, y, z)
+    
+    glVertex3f(x, y, 0)
+    glVertex3f(x, y + WALL_THICKNESS, 0)
+    glVertex3f(x, y + WALL_THICKNESS, WALL_HEIGHT)
+    glVertex3f(x, y, z)
+    
+    glVertex3f(x, y + TILE_SIZE, 0)
+    glVertex3f(x + WALL_THICKNESS, y + TILE_SIZE, 0)
+    glVertex3f(x + WALL_THICKNESS, y + TILE_SIZE, WALL_HEIGHT)
+    glVertex3f(x, y + TILE_SIZE, z)
+    
+    glVertex3f(x + TILE_SIZE, y, 0)
+    glVertex3f(x + TILE_SIZE, y + WALL_THICKNESS, 0)
+    glVertex3f(x + TILE_SIZE, y + WALL_THICKNESS, z)
+    glVertex3f(x + TILE_SIZE, y, z)
     glEnd()
+
 
 def draw_floor(floor):
     for i in range(FLOOR_WIDTH):
@@ -109,7 +147,8 @@ def draw_floor(floor):
             tile_x = i * TILE_SIZE - ROOM_WIDTH/2
             tile_y = j * TILE_SIZE - ROOM_DEPTH/2
             if floor[i][j].height > 0:
-                draw_obstacle(i, j, floor[i][j].height, 0)
+                #draw_obstacle(i, j, floor[i][j].height, 0)
+                draw_tile_walls(i, j,floor[i][j].height , floor[i][j].obstacle)
             if floor[i][j].give_status() == True:
                 color = lit_color
             elif floor[i][j].intensity > 0:
