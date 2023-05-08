@@ -122,14 +122,13 @@ def main_game_loop(floor_list, lens_of_chromosomes,count):
     while True:
         # Update the floor
         floor = floor_list[count]
-        print(floor)
+        print(count)
+
         # Handle events
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-                draw_floor(floor)
-        runnning =  True
 
         # Clear the screen and depth buffer
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
@@ -137,63 +136,24 @@ def main_game_loop(floor_list, lens_of_chromosomes,count):
         # Set up the camera
         glLoadIdentity()
         gluLookAt(0, -10, 5, 0, 0, 0, 0, 0, 1)
-        if runnning:
+
         # Draw the floor
-            draw_floor(floor)
-        pygame.display.flip()
+        draw_floor(floor)
 
         # Update the display
-        time.sleep(0.1)
         pygame.display.flip()
 
         # Limit the framerate to 60 FPS
-        clock.tick(30)
-        
-        # Update count to draw the next floor
-        count += 1
-        if count > count_max:
-            return
-
-# # Main game loop
-# def main_game_loop(floor_list, lens_of_chromosomes):
-#     count_max = len(floor_list)-1
-#     count = 0
-#     while True:
-#         # Update the floor
-#         floor = floor_list[count]
-#         print(count)
-
-#         # Handle events
-#         for event in pygame.event.get():
-#             if event.type == pygame.QUIT:
-#                 pygame.quit()
-#                 sys.exit()
-
-#         # Clear the screen and depth buffer
-#         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-
-#         # Set up the camera
-#         glLoadIdentity()
-#         gluLookAt(0, -10, 5, 0, 0, 0, 0, 0, 1)
-
-#         # Draw the floor
-#         draw_floor(floor)
-
-#         # Update the display
-#         time.sleep(0.1)
-#         pygame.display.flip()
-
-#         # Limit the framerate to 60 FPS
-#         clock.tick(30)
-#         if count < count_max:
-#             count += 1
+        clock.tick(5)
+        if count < count_max:
+            count += 1
 # main_game_loop()
 opt = GA(
     problem=Light,
     X = 10,
     Y = 10,
     H = 50,
-    room = Room(100,100,50,[(0,0,2,45),(5,5,2,42),(1,9,2,10),(3,9,1,4)],2,[0,0,0,0]),
+    room = Room(100,100,50,[(0,0,2,45),(5,5,2,42),(1,9,2,10),(3,9,1,4)],16, [(0, 3, 15, 15, 8)]),
     parent_selection = 3,
     survivor_selection = 2,
     population_size=30,
@@ -204,7 +164,5 @@ opt = GA(
 
 population = (opt.initial_population())
 
-fitness, population, tiles= (opt.run())
-main_game_loop(tiles,fitness, count=0)
-# for each in tiles:
-#     print(each)
+fitness, population, tiles= opt.run()
+main_game_loop(tiles,fitness)
