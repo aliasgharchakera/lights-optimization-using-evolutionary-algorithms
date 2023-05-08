@@ -8,4 +8,4 @@ def draw_graph(fitness):
     plt.title('Fitness over generations')
     plt.show()
 
-draw_graph(fit)
+# draw_graph(fit)
