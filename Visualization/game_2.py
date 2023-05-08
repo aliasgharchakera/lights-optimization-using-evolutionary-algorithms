@@ -142,7 +142,7 @@ def draw_floor(floor):
             tile_y = j * TILE_SIZE - ROOM_DEPTH/2
             if floor[i][j].height > 0:
                 draw_obstacle(i, j, floor[i][j].height, 0)
-                #draw_tile_walls(i, j,floor[i][j].height , floor[i][j].obstacle)
+                draw_tile_walls(i, j,floor[i][j].height , floor[i][j].obstacle)
             if floor[i][j].give_status() == True:
                 color = lit_color
             elif floor[i][j].intensity > 0:
@@ -155,9 +155,9 @@ def draw_floor(floor):
             # color = floor[i][j]
             draw_tile(tile_x, tile_y, color)
     
-def main_game_loop(floor_list, lens_of_chromosomes,count):
+def main_game_loop(floor_list, lens_of_chromosomes):
+    count = 0
     count_max = len(floor_list)-1
-    running = False 
     while True:
         # Update the floor
         floor = floor_list[count]
