@@ -141,8 +141,8 @@ def draw_floor(floor):
             tile_x = i * TILE_SIZE - ROOM_WIDTH/2
             tile_y = j * TILE_SIZE - ROOM_DEPTH/2
             if floor[i][j].height > 0:
-                #draw_obstacle(i, j, floor[i][j].height, 0)
-                draw_tile_walls(i, j,floor[i][j].height , floor[i][j].obstacle)
+                draw_obstacle(i, j, floor[i][j].height, 0)
+                #draw_tile_walls(i, j,floor[i][j].height , floor[i][j].obstacle)
             if floor[i][j].give_status() == True:
                 color = lit_color
             elif floor[i][j].intensity > 0:
