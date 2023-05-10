@@ -231,6 +231,7 @@ class Room:
             for j in range(Y):
                 self.tiles[i][j].light_down()
                 self.tiles[i][j].fill_vessel = [0]*8
+                self.tiles[i][j].intensity = 0
 
     def shadow_region(self, x_tile, y_tile,x_light, y_light, radius):
         # returns dimensions of the shadow region
