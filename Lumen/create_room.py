@@ -120,7 +120,7 @@ class Room:
                         else:
                             fill = (temp_radius - distance)/(self.width/X)
                             self.fill_less_than_one(k,j,pos_x,pos_y,fill)
-                            self.neighbourhood_lights(k,j,0.5)
+                            self.neighbourhood_lights(k,j,0.3)
          
         pass
     # internal functions
@@ -198,18 +198,18 @@ class Room:
                     if (j,k) not in shadow_tiles:
                         self.tiles[j][k].light_up()
             if (start_x, start_y) not in shadow_tiles:
-                self.neighbourhood_lights(start_x,start_y, 0.5)
+                self.neighbourhood_lights(start_x,start_y, 0.2)
             if (end_x, end_y) not in shadow_tiles:
-                self.neighbourhood_lights(end_x,end_y, 0.5)
+                self.neighbourhood_lights(end_x,end_y, 0.2)
             if (start_x, end_y) not in shadow_tiles:
-                self.neighbourhood_lights(start_x,end_y, 0.5)
+                self.neighbourhood_lights(start_x,end_y, 0.2)
             if (end_x, start_y) not in shadow_tiles:
-                self.neighbourhood_lights(end_x,start_y, 0.5)
+                self.neighbourhood_lights(end_x,start_y, 0.2)
 
-            self.neighbourhood_lights(start_x,start_y, 0.5)
-            self.neighbourhood_lights(end_x,end_y, 0.5)
-            self.neighbourhood_lights(start_x,end_y, 0.5)
-            self.neighbourhood_lights(end_x,start_y, 0.5)
+            self.neighbourhood_lights(start_x,start_y, 0.4)
+            self.neighbourhood_lights(end_x,end_y, 0.4)
+            self.neighbourhood_lights(start_x,end_y, 0.4)
+            self.neighbourhood_lights(end_x,start_y, 0.4)
             
 
 
@@ -231,6 +231,7 @@ class Room:
             for j in range(Y):
                 self.tiles[i][j].light_down()
                 self.tiles[i][j].fill_vessel = [0]*8
+                self.tiles[i][j].intensity = 0
 
     def shadow_region(self, x_tile, y_tile,x_light, y_light, radius):
         # returns dimensions of the shadow region

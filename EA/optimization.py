@@ -60,7 +60,12 @@ class Optimization:
         Returns:
             Evolution: Evolution object
         """
-        return GA(
+        best_fitness = []
+        best_population = []
+        best_tiles = []
+        for time in range(0, 24, 3):
+            self.room = Room(100,100,50,[(0,0,2,45),(5,5,2,42),(1,9,2,10),(3,9,1,4)], time, [(0, 3, 15, 15, 8)])
+            ga = GA(
                 problem=self.problem,
                 X = self.x,
                 Y = self.y,
@@ -73,6 +78,29 @@ class Optimization:
                 number_of_generations=self.number_of_generations,
                 number_of_offsprings=self.number_of_offsprings
                 )
+            fitness, population, tiles = ga.run()
+            # sort fitness, population and tiles according to the best fitness using zip in descending order
+            # print(fitness)
+            fitness, population, tiles = zip(*sorted(zip(fitness, population, tiles), reverse=True))
+            # print(fitness)
+            # return
+            best_fitness.append(fitness[0])
+            best_population.append(population[0])
+            best_tiles.append(tiles[0])
+            
+        for i, p in enumerate(best_population):
+            print("Time: ", i*3, "Fitness: ", best_fitness[i], " Length Of Chromosone : ", len(p))
+            print(p)
+            # for x, y in p:
+            #     # for x, y in c:
+            #     self.room.light_light(x, y)
+            #     self.room.light_tiles()
+            # for row in best_tiles[i]:
+            #     for tile in row:
+            #         print(tile, end = " ")
+            #     print()
+            # self.room.reset()
+        
     
 
     def get_title(self, fitness_type: str) -> str:
@@ -170,19 +198,18 @@ class Optimization:
         plt.savefig("Analysis/" + filename + ".png")
         plt.close()
 
-# for i in range(24):
-#     opt = Optimization(
-#         problem=Light,
-#         X = 10,
-#         Y = 10,
-#         H = 10,
-#         room = Room(10,10,10,[(0,0,0,0)],i),
-#         population_size=30,
-#         number_of_offsprings=10,
-#         number_of_generations=100,
-#         mutation_rate=0.50,
-#         number_of_iterations=10,
-#         selection_case=(0, 0)
-#         )
+opt = Optimization(
+    problem=Light,
+    X = 10,
+    Y = 10,
+    H = 10,
+    room = None,
+    population_size=30,
+    number_of_offsprings=10,
+    number_of_generations=100,
+    mutation_rate=0.50,
+    number_of_iterations=10,
+    selection_case=(3, 2)
+    )
 
-#     print(opt.evolve().run())
+opt.evolve()
