@@ -295,7 +295,7 @@ class GA:
             fit_tiles.append(tiles)
         
         # Return the list of best fitness values for each generation
-        return fitness_lst, fit_pouplation,fit_tiles[-1]
+        return fitness_lst, fit_pouplation,fit_tiles
 
 """
 selection_methods = [
@@ -338,7 +338,7 @@ opt = GA(
     X = 10,
     Y = 10,
     H = 50,
-    room = Room(100,100,50,[(0,0,2,45),(5,5,2,42),(1,9,2,10),(3,9,1,4)],2,[(0,0,0,0)]),
+    room = Room(100,100,50,[(0,0,2,45),(5,5,2,42),(1,9,2,10),(3,9,1,4)],16, [(0, 3, 15, 15, 8)]),
     parent_selection = 3,
     survivor_selection = 2,
     population_size=30,

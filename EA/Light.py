@@ -32,22 +32,22 @@ class Light(Problem):
 
         # Randomly generate the (x, y) positions for each light
         chromosone = []
-        num = room.num_lit_tiles()
-        while num<width*height*0.7:
-            # Generate a random position for the light
-            x = random.randint(0, width-1)
-            y = random.randint(0, height-1)
-            chromosone.append((x, y))
-            # Calculate the number of lit tiles
-            room.light_light(x, y)
-            room.light_tiles()
-            num = room.num_lit_tiles()
-
-        # for i in range(num_lights):
+        # num = room.num_lit_tiles()
+        # while num<=width*height*0.7:
         #     # Generate a random position for the light
         #     x = random.randint(0, width-1)
         #     y = random.randint(0, height-1)
         #     chromosone.append((x, y))
+        #     # Calculate the number of lit tiles
+        #     room.light_light(x, y)
+        #     room.light_tiles()
+        #     num = room.num_lit_tiles()
+
+        for i in range(num_lights):
+            # Generate a random position for the light
+            x = random.randint(0, width-1)
+            y = random.randint(0, height-1)
+            chromosone.append((x, y))
 
         # Return the list of light positions (chromosome)
         return chromosone
@@ -85,7 +85,7 @@ class Light(Problem):
         # We want to maximize the number of lit tiles and minimize the number of lights in the chromosome
         fitness = w * num_lit_tiles - (1 - w) * num_lights
 
-        print("num lit tiles : ",num_lit_tiles," len of chromosone : ", len(light_positions), " fitness: ", fitness)
+        # print("num lit tiles : ",num_lit_tiles," len of chromosone : ", len(light_positions), " fitness: ", fitness)
         
         # Tiles = []
         # Tiles.append(Room.tiles)
