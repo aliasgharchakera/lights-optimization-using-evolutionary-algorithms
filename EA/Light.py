@@ -34,6 +34,8 @@ class Light(Problem):
         chromosone = []
         # num = room.num_lit_tiles()
         # while num<width*height*0.7:
+        # num = room.num_lit_tiles()
+        # while num<=width*height*0.7:
         #     # Generate a random position for the light
         #     x = random.randint(0, width-1)
         #     y = random.randint(0, height-1)
