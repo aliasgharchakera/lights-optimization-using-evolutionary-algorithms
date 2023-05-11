@@ -197,7 +197,7 @@ opt = GA(
     X = 10,
     Y = 10,
     H = 50,
-    room = Room(100,100,50,[(0,0,2,45),(5,5,2,42),(1,9,2,10),(3,9,1,4)],12, [(0, 3, 15, 15, 8)]),
+    room = Room(100,50,100,[(0,0,2,45),(5,5,2,42),(1,9,2,10),(3,9,1,4)],12, [(0, 3, 15, 15, 8)]),
     parent_selection = 3,
     survivor_selection = 2,
     population_size=30,
@@ -208,6 +208,6 @@ opt = GA(
 
 population = (opt.initial_population())
 
-fitness, population, tiles= opt.run()
+fitness, population, tiles, _, _ = opt.run()
 fitness, population, tiles = zip(*sorted(zip(fitness, population, tiles), reverse=True))
 main_game_loop(tiles,fitness)

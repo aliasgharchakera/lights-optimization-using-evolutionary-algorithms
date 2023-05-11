@@ -16,7 +16,7 @@ MINIMUM_FILL = 0.6
 class Room:
 
     # externally called functions
-    def __init__(self, width, height, length, obstacles, time,window_list):
+    def __init__(self, width, length, height, obstacles, time,window_list):
         self.width = width
         self.height = height
         self.length = length

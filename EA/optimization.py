@@ -63,8 +63,12 @@ class Optimization:
         best_fitness = []
         best_population = []
         best_tiles = []
+        avg_fitness = []
+        avg_len = []
+        best_len = []
         for time in range(0, 24, 3):
-            self.room = Room(100,100,50,[(0,0,2,45),(5,5,2,42),(1,9,2,10),(3,9,1,4)], time, [(0, 3, 15, 15, 8)])
+            # self.room = Room(100,100,50,[(0,0,2,45),(5,5,2,42),(1,9,2,10),(3,9,1,4)], time, [(0, 3, 15, 15, 8)])
+            self.room = Room(100,100,50,[], time, [(10, 0, 25, 25, 10)])
             ga = GA(
                 problem=self.problem,
                 X = self.x,
@@ -78,7 +82,7 @@ class Optimization:
                 number_of_generations=self.number_of_generations,
                 number_of_offsprings=self.number_of_offsprings
                 )
-            fitness, population, tiles = ga.run()
+            fitness, population, tiles, avg_f, avg_l = ga.run()
             # sort fitness, population and tiles according to the best fitness using zip in descending order
             # print(fitness)
             fitness, population, tiles = zip(*sorted(zip(fitness, population, tiles), reverse=True))
@@ -87,10 +91,21 @@ class Optimization:
             best_fitness.append(fitness[0])
             best_population.append(population[0])
             best_tiles.append(tiles[0])
-            
-        for i, p in enumerate(best_population):
-            print("Time: ", i*3, "Fitness: ", best_fitness[i], " Length Of Chromosone : ", len(p))
-            print(p)
+            avg_fitness.append(avg_f)
+            avg_len.append(avg_l)
+            best_len.append(len(population[0]))
+        
+        generations = [i for i in range(0, 24, 3)]
+        plt.plot(generations, avg_len, label = 'Average number of lights')
+        # plt.plot(generations, best_len, label = 'Best number of lights')
+        plt.xlabel('Time')
+        plt.ylabel('Number of Lights')
+        # plt.title('Len of Chromosome over generations')
+        plt.legend()
+        plt.show()    
+        # for i, p in enumerate(best_population):
+        #     print("Time: ", i*3, "Fitness: ", best_fitness[i], " Length Of Chromosone : ", len(p))
+        #     print(p)
             # for x, y in p:
             #     # for x, y in c:
             #     self.room.light_light(x, y)

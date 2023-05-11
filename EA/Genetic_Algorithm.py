@@ -2,6 +2,7 @@ import random
 
 import os
 import sys
+import statistics
 
 # add the parent directory of the current directory to the Python path
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -279,6 +280,9 @@ class GA:
         fit_pouplation = []
 
         fit_tiles = []
+        avg_fitness = []
+        len_chromosome = []
+        
         # Iterate over the specified number of generations
         for _ in range(self.number_of_generations):
             
@@ -294,9 +298,15 @@ class GA:
             fit_pouplation.append(best_individual)
 
             fit_tiles.append(tiles)
+            
+            for p in population:
+                fitness, _ = self.fitness_function(self.room, p)
+                len_chromosome.append(len(p))
+                avg_fitness.append(fitness)
+                
         
         # Return the list of best fitness values for each generation
-        return fitness_lst, fit_pouplation,fit_tiles
+        return fitness_lst, fit_pouplation, fit_tiles, statistics.mean(avg_fitness), statistics.mean(len_chromosome)
 
 """
 selection_methods = [
@@ -338,11 +348,13 @@ import matplotlib.pyplot as plt
 
 # draw a graph of fitness over generations where the axis are labelled
 def draw_graph(fitness, len_population, tiles):
-    plt.plot(len_population)
-    plt.plot(tiles)
+    generations = [i for i in range(len(fitness))]
+    plt.plot(generations, len_population, label = 'Number of Lights')
+    # plt.plot(generations, tiles, label = 'Number of lit tiles')
     plt.xlabel('Generation')
-    plt.ylabel('Len of Chromosome')
+    # plt.ylabel('Len of Chromosome')
     plt.title('Len of Chromosome over generations')
+    plt.legend()
     plt.show()
 
 if __name__ == "__main__":
@@ -362,7 +374,7 @@ if __name__ == "__main__":
         )
 
     population = (opt.initial_population())
-    fitness, population, tiles = opt.run()
+    fitness, population, tiles, _ = opt.run()
     
     len_num_lit_tiles = []
     
