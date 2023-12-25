@@ -2,9 +2,13 @@
 *.aux
 *.out
 *.log
-*.pdf
 .DS_Store
 auto/
 solution/
 __pycache__/
 resources/
+*.synctex.gz
+*.synctex.gz(busy)
+*.xml
+*.run.xml
+*.bbl
